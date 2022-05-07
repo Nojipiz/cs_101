@@ -1,0 +1,12 @@
+{
+  "non_terminals": [
+    "S"
+  ],
+  "terminals": [
+    "a"
+  ],
+  "productions": [
+    "S->a"
+  ],
+  "start_symbol": "S"
+}
