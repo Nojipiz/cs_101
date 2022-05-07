@@ -1,12 +1,19 @@
 {
   "non_terminals": [
-    "S"
+    "S",
+    "A",
+    "B"
   ],
   "terminals": [
-    "a"
+    "a",
+    "b"
   ],
   "productions": [
-    "S->a"
+    "S->A",
+    "S->B",
+    "A->a",
+    "B->b",
+    "B->a"
   ],
   "start_symbol": "S"
 }
