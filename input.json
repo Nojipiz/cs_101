@@ -11,7 +11,7 @@
   "productions": [
     "S->A",
     "S->B",
-    "A->AA",
+    "A->aA",
     "B->b"
   ],
   "start_symbol": "S"

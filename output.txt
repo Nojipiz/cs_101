@@ -1,4 +1,12 @@
-A Fibonacci Tree
-└╼ 3
-Another fibo
-└╼ 3
+S
+├╼ A
+│ ├╼ a
+│ └╼ A
+│   ├╼ a
+│   └╼ A
+│     ├╼ a
+│     └╼ A
+│       ├╼ a
+│       └╼ A
+└╼ B
+  └╼ b
