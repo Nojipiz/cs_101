@@ -27,6 +27,7 @@ fn create_language_elements_from(plain_elements: PlainElements) -> LanguageEleme
         terminals: plain_elements.terminals,
         productions,
         start_symbol: plain_elements.start_symbol,
+        word_to_verify: plain_elements.word_to_verify,
     }
 }
 
@@ -47,6 +48,7 @@ pub struct LanguageElements {
     pub terminals: Vec<String>,
     pub productions: Vec<Production>,
     pub start_symbol: String,
+    pub word_to_verify: String,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -61,4 +63,5 @@ struct PlainElements {
     terminals: Vec<String>,
     productions: Vec<String>,
     start_symbol: String,
+    word_to_verify: String,
 }

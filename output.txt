@@ -1,11 +1,47 @@
 S
-├╼ a
-└╼ aS
-  ├╼ aa
-  └╼ aaS
-    ├╼ aaa
-    └╼ aaaS
-      ├╼ aaaa
-      └╼ aaaaS
-        ├╼ aaaaa
-        └╼ aaaaaS
+└╼ aA
+  ├╼ aaA
+  │ ├╼ aaaA
+  │ │ ├╼ aaaaA
+  │ │ │ ├╼ aaaaaA
+  │ │ │ ├╼ aaaabA
+  │ │ │ └╼ aaaab
+  │ │ ├╼ aaabA
+  │ │ │ ├╼ aaabaA
+  │ │ │ ├╼ aaabbA
+  │ │ │ └╼ aaabb
+  │ │ └╼ aaab
+  │ ├╼ aabA
+  │ │ ├╼ aabaA
+  │ │ │ ├╼ aabaaA
+  │ │ │ ├╼ aababA
+  │ │ │ └╼ aabab
+  │ │ ├╼ aabbA
+  │ │ │ ├╼ aabbaA
+  │ │ │ ├╼ aabbbA
+  │ │ │ └╼ aabbb
+  │ │ └╼ aabb
+  │ └╼ aab
+  ├╼ abA
+  │ ├╼ abaA
+  │ │ ├╼ abaaA
+  │ │ │ ├╼ abaaaA
+  │ │ │ ├╼ abaabA
+  │ │ │ └╼ abaab
+  │ │ ├╼ ababA
+  │ │ │ ├╼ ababaA
+  │ │ │ ├╼ ababbA
+  │ │ │ └╼ ababb
+  │ │ └╼ abab
+  │ ├╼ abbA
+  │ │ ├╼ abbaA
+  │ │ │ ├╼ abbaaA
+  │ │ │ ├╼ abbabA
+  │ │ │ └╼ abbab
+  │ │ ├╼ abbbA
+  │ │ │ ├╼ abbbaA
+  │ │ │ ├╼ abbbbA
+  │ │ │ └╼ abbbb
+  │ │ └╼ abbb
+  │ └╼ abb
+  └╼ ab

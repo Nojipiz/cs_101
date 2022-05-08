@@ -1,13 +1,18 @@
 {
   "non_terminals": [
-    "S"
+    "S",
+    "A"
   ],
   "terminals": [
+    "a",
     "a"
   ],
   "productions": [
-    "S->a",
-    "S->aS"
+    "S->aA",
+    "A->aA",
+    "A->bA",
+    "A->b"
   ],
-  "start_symbol": "S"
+  "start_symbol": "S",
+  "word_to_verify": "abbb"
 }
