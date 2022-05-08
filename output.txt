@@ -1,12 +1,11 @@
 S
-├╼ A
-│ ├╼ a
-│ └╼ A
-│   ├╼ a
-│   └╼ A
-│     ├╼ a
-│     └╼ A
-│       ├╼ a
-│       └╼ A
-└╼ B
-  └╼ b
+├╼ a
+└╼ aS
+  ├╼ aa
+  └╼ aaS
+    ├╼ aaa
+    └╼ aaaS
+      ├╼ aaaa
+      └╼ aaaaS
+        ├╼ aaaaa
+        └╼ aaaaaS

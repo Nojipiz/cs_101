@@ -8,8 +8,7 @@ fn main() {
     let language_element: LanguageElements = read_elements::get_language_elements();
     let tree = TreeBuilder::new();
     generate_full_parse_tree(&language_element, &tree, &language_element.start_symbol, 0);
-    //tree.peek_write("output.txt").unwrap();
-    tree.print();
+    tree.peek_write("output.txt").unwrap();
 }
 
 fn generate_full_parse_tree(
