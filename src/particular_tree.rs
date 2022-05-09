@@ -1,14 +1,19 @@
 use crate::full_parse_tree::get_avaliable_productions_per_word;
 use crate::read_elements::LanguageElements;
 
-pub fn generate_particular_tree(language: &LanguageElements) {
-    let res = find_path(&language, language.start_symbol.clone(), &mut Vec::new());
-    if !res {
-        println!("We can't generate the word ");
+pub fn generate_particular_tree(language: &LanguageElements) -> Vec<String> {
+    let finded_path = find_path(&language, language.start_symbol.clone(), &mut Vec::new());
+    match finded_path {
+        Some(path) => path,
+        None => Vec::new(),
     }
 }
 
-fn find_path(language: &LanguageElements, current_word: String, path: &mut Vec<String>) -> bool {
+fn find_path(
+    language: &LanguageElements,
+    current_word: String,
+    path: &mut Vec<String>,
+) -> Option<Vec<String>> {
     let posible_words = get_avaliable_productions_per_word(&language.productions, current_word);
     for word in posible_words {
         if !compare_words(language, &word, &language.word_to_verify) {
@@ -23,15 +28,15 @@ fn find_path(language: &LanguageElements, current_word: String, path: &mut Vec<S
                 language.start_symbol,
                 path.join("->")
             );
-            return true;
+            return Some(path.to_owned());
         }
         let finded = find_path(&language, word.clone(), path);
-        if finded {
-            return finded; // || true
+        if finded.is_some() {
+            return finded;
         }
         path.remove(path.len() - 1);
     }
-    return false;
+    return None;
 }
 
 fn compare_words(language: &LanguageElements, current_word: &String, verify_word: &String) -> bool {

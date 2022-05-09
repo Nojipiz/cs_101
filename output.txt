@@ -45,3 +45,8 @@ S
   │ │ └╼ abbb
   │ └╼ abb
   └╼ ab
+
+        --------------PARTICULAR TREE RESULTS---------------
+            
+The word "baaaabb" can't be generated from the current language
+            "baaaabb" ∉ L(G)
