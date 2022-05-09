@@ -1,32 +1,40 @@
 use crate::full_parse_tree::get_avaliable_productions_per_word;
-use crate::read_elements::{LanguageElements, Production};
+use crate::read_elements::LanguageElements;
 
 pub fn generate_particular_tree(language: &LanguageElements) {
-    print_combinations(&language, language.start_symbol.clone());
+    let res = find_path(&language, language.start_symbol.clone(), &mut Vec::new());
+    if !res {
+        println!("We can't generate the word ");
+    }
 }
 
-fn print_combinations(language: &LanguageElements, current_word: String) {
+fn find_path(language: &LanguageElements, current_word: String, path: &mut Vec<String>) -> bool {
     let posible_words = get_avaliable_productions_per_word(&language.productions, current_word);
-    posible_words.into_iter().for_each(|word| {
-        let is_valid =
-            compare_current_word_with_verify_word(language, &word, &language.word_to_verify);
-        if !is_valid {
-            return;
+    for word in posible_words {
+        if !compare_words(language, &word, &language.word_to_verify) {
+            continue;
         }
+        path.push(word.clone());
         if word == language.word_to_verify {
-            println!("Word founded {}", word);
-            return;
+            print!(
+                "The current path to generate the word {:?} is :
+                {}->{}",
+                &language.word_to_verify,
+                language.start_symbol,
+                path.join("->")
+            );
+            return true;
         }
-        print!("Possible valid word {:?}", word);
-        print_combinations(&language, word);
-    });
+        let finded = find_path(&language, word.clone(), path);
+        if finded {
+            return finded; // || true
+        }
+        path.remove(path.len() - 1);
+    }
+    return false;
 }
 
-fn compare_current_word_with_verify_word(
-    language: &LanguageElements,
-    current_word: &String,
-    verify_word: &String,
-) -> bool {
+fn compare_words(language: &LanguageElements, current_word: &String, verify_word: &String) -> bool {
     for (index, character) in current_word.char_indices() {
         if language.non_terminals.contains(&character.to_string()) {
             break;

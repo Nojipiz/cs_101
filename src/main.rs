@@ -12,7 +12,6 @@ fn main() {
     let language_element: LanguageElements = read_elements::get_language_elements();
     let tree = TreeBuilder::new();
     generate_full_parse_tree(&language_element, &tree, &language_element.start_symbol, 0);
-
-    generate_particular_tree(&language_element);
     tree.peek_write("output.txt").unwrap();
+    generate_particular_tree(&language_element);
 }
