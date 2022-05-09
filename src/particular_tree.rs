@@ -21,13 +21,6 @@ fn find_path(
         }
         path.push(word.clone());
         if word == language.word_to_verify {
-            print!(
-                "The current path to generate the word {:?} is :
-                {}->{}",
-                &language.word_to_verify,
-                language.start_symbol,
-                path.join("->")
-            );
             return Some(path.to_owned());
         }
         let finded = find_path(&language, word.clone(), path);

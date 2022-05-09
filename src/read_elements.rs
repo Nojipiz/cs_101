@@ -17,10 +17,10 @@ fn read_input() -> String {
 }
 
 fn create_language_elements_from(plain_elements: PlainElements) -> LanguageElements {
-    let plain_productions: Vec<String> = plain_elements.productions;
+    let plain_productions: &Vec<String> = &plain_elements.productions;
     let productions: Vec<Production> = plain_productions
         .into_iter()
-        .map(|production| generate_production_from_string(production))
+        .map(|production| generate_production_from_string(production.to_owned(), &plain_elements))
         .collect();
     LanguageElements {
         non_terminals: plain_elements.non_terminals,
@@ -31,15 +31,30 @@ fn create_language_elements_from(plain_elements: PlainElements) -> LanguageEleme
     }
 }
 
-fn generate_production_from_string(plain_production: String) -> Production {
+fn generate_production_from_string(
+    plain_production: String,
+    plain_elements: &PlainElements,
+) -> Production {
     let elements: Vec<&str> = plain_production.split("->").collect();
     if elements.len() != 2 {
         panic!("Bad production syntax, check the productions at input.json file")
     }
-    Production {
-        init: elements[0].to_owned(),
-        result: elements[1].to_owned(),
+    check_and_generate_production(
+        elements[0].to_owned(),
+        elements[1].to_owned(),
+        plain_elements,
+    )
+}
+
+fn check_and_generate_production(
+    init: String,
+    result: String,
+    plain_elements: &PlainElements,
+) -> Production {
+    if !plain_elements.non_terminals.contains(&init) {
+        panic!("The productions can't contain non terminal symbols before the -> ")
     }
+    Production { init, result }
 }
 
 #[derive(Debug, Deserialize, Serialize)]
