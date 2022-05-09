@@ -48,5 +48,5 @@ S
 
         --------------PARTICULAR TREE RESULTS---------------
             
-The word "baaaabb" can't be generated from the current language
-            "baaaabb" ∉ L(G)
+S->aA->abA->abaA->ababA->ababaA->ababab
+            "ababab" ∈ L(G)

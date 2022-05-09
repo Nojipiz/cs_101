@@ -5,7 +5,7 @@
   ],
   "terminals": [
     "a",
-    "a"
+    "b"
   ],
   "productions": [
     "S->aA",
@@ -14,5 +14,5 @@
     "A->b"
   ],
   "start_symbol": "S",
-  "word_to_verify": "baaaabb"
+  "word_to_verify": "ababab"
 }
