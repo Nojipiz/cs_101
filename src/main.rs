@@ -21,6 +21,8 @@ fn main() {
     write_results(&tree, path, language_element)
 }
 
+/// This function check the data consistency after generates the LanguageElements,
+/// with the rules given in class
 fn check_language_properties(language_element: &LanguageElements) {
     if language_element.non_terminals.is_empty() || language_element.terminals.is_empty() {
         panic!("The non terminals and terminals elements can't be void");

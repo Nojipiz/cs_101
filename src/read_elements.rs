@@ -1,6 +1,9 @@
 use serde::{Deserialize, Serialize};
 use std::fs;
 
+/// Read the data in input.json and Deserialize it in the element "PlainElements"
+/// it will be casted to LanguageElements after a data integrity verification and
+/// a convertion due the Production struct format
 pub fn get_language_elements() -> LanguageElements {
     let input_content = read_input();
     let plain_elements: PlainElements = serde_json::from_str(&input_content).unwrap();
@@ -8,6 +11,7 @@ pub fn get_language_elements() -> LanguageElements {
     language_elements
 }
 
+/// With the FileSystem manipulation operations, reads form the root of the file the json file
 fn read_input() -> String {
     let input_content: String = fs::read_to_string("input.json").unwrap_or(String::from("Error"));
     if input_content == "Error" {
@@ -16,6 +20,8 @@ fn read_input() -> String {
     input_content
 }
 
+/// Converts the PlainElements into LanguageElements, the diffetence is that LanguageElements
+/// contains the formatted Production Vec
 fn create_language_elements_from(plain_elements: PlainElements) -> LanguageElements {
     let plain_productions: &Vec<String> = &plain_elements.productions;
     let productions: Vec<Production> = plain_productions
@@ -31,6 +37,8 @@ fn create_language_elements_from(plain_elements: PlainElements) -> LanguageEleme
     }
 }
 
+///Converts a String to a Production, for example "S->aA" so this will generates a
+/// production with init:"S" and result:"aA"
 fn generate_production_from_string(
     plain_production: String,
     plain_elements: &PlainElements,
@@ -46,6 +54,7 @@ fn generate_production_from_string(
     )
 }
 
+/// Verify the init content of the production
 fn check_and_generate_production(
     init: String,
     result: String,

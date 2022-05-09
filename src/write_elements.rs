@@ -5,6 +5,7 @@ use debug_tree::TreeBuilder;
 
 use crate::read_elements::LanguageElements;
 
+/// Write the full tree and particular tree to output.txt file
 pub fn write_results(
     full_tree: &TreeBuilder,
     path_to_word: Vec<String>,

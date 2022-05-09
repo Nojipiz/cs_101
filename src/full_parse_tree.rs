@@ -2,6 +2,9 @@ use debug_tree::*;
 
 use crate::read_elements::{LanguageElements, Production};
 
+/// Main function for generation, contians a type of backtracking to create a tree
+/// into the tree element, contians a level variable that will be checked at the start of
+/// an interation, for this homework the max value will be 5 but it works fine with more than 20 iterations
 pub fn generate_full_parse_tree(
     language: &LanguageElements,
     tree: &TreeBuilder,
@@ -23,6 +26,9 @@ pub fn generate_full_parse_tree(
     });
 }
 
+/// Generates a list of words with the replacements for every single symbol
+/// in the word, and return a list with the next generation of elements in the
+/// tree
 pub fn get_avaliable_productions_per_word(
     productions: &Vec<Production>,
     current_word: String,
@@ -42,6 +48,8 @@ pub fn get_avaliable_productions_per_word(
         .collect::<Vec<String>>()
 }
 
+/// See the function replace_symbol_in_word, this function do the same with
+/// multiple replacements
 fn generate_multiple_words_with_replacements(
     current_word: String,
     replacements: Vec<&String>,
@@ -53,6 +61,9 @@ fn generate_multiple_words_with_replacements(
         .collect::<Vec<String>>()
 }
 
+/// Replace a &str in String in the defined index
+/// example: current_word: "aBc" index: 1 inner_word:"X"
+/// so this function return "aXc"
 fn replace_symbol_in_word(current_word: &String, index: usize, inner_word: &String) -> String {
     let mut new_word: String = current_word.to_owned();
     new_word.remove(index);
@@ -60,6 +71,9 @@ fn replace_symbol_in_word(current_word: &String, index: usize, inner_word: &Stri
     new_word
 }
 
+/// Search for the avaliable prodcutions for a symbol, example:
+/// current_symbol:"S" and productions: "S->a", "S->b"
+/// so this function return "a", "b"
 fn get_avaliable_productions_per_symbol(
     productions: &Vec<Production>,
     current_symbol: char,
