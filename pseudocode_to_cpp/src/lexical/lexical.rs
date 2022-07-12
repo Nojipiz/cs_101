@@ -1,4 +1,4 @@
-use std::fmt::{Display};
+use std::{fmt::{Display}, ops::Add};
 
 use pomsky_macro::pomsky;
 use regex::{Regex, RegexSet};
@@ -16,9 +16,23 @@ pub fn plain_text_to_tokenized_code(pseudocode_lines: Box<Vec<String>>) -> Vec<V
 fn tokenized_line(line: String) -> Vec<Word> {
     let filter_white_spaces = Regex::new(pomsky!([space]+)).unwrap();
     let lines_filtered = filter_white_spaces.replace_all(&line, " ");
-    let words: Vec<&str> = lines_filtered.split(" ").collect();
-
+    let plain_words: Vec<&str> = lines_filtered.split(" ").collect();
+    let words = wrap_literal_strings(Box::new(plain_words));
     words.into_iter().map(|word| tokenized_word(word)).collect()
+}
+
+fn wrap_literal_strings(words: Box<Vec<&str>>) -> Vec<&str>{
+    let mut wrapped_words:Vec<&str> = vec![];
+    let mut last_string_element:Box<String> = Box::new(String::from(""));
+    for word in words.iter() {
+        if (last_string_element).is_empty() {
+            if word.contains(" ") {
+                last_string_element.add("");
+            }
+        }
+        wrapped_words.push(*word);
+    }
+    *words
 }
 
 fn tokenized_word(word: &str) -> Word {
