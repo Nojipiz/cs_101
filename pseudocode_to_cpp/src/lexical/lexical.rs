@@ -9,7 +9,10 @@ pub fn plain_text_to_tokenized_code(pseudocode_lines: Box<Vec<String>>) {
         .map(|line| tokenized_line(line.to_string()))
         .collect();
     for line in document.iter() {
-        println!("{:?}", line);
+        for word in line.iter() {
+            print!("{:?} ", word.token);
+        }
+        println!("{}", "");
     }
 }
 
@@ -23,15 +26,21 @@ fn tokenized_line(line: String) -> Vec<Word> {
 
 fn tokenized_word(word: &str) -> Word {
     let regex_exp = RegexSet::new(&[
-        pomsky!("<-"),                       // Asignation
-        pomsky!( [digit]+ ),                 // Integer
-        pomsky!( [digit]+ '.'|',' [digit]+), // Float
-        pomsky!( '"' [word]* '"'),            // String
-        pomsky!("true" | "false"),           // Boolean
-        pomsky!("if"),
-        pomsky!("while"),
-        pomsky!("for"),
-        pomsky!("fun"),
+        pomsky!(Start "<-" End),
+        pomsky!(Start '"' [word]* '"' End),
+        pomsky!(Start [digit]+ '.'|',' [digit]+ End),
+        pomsky!(Start [digit]+ End),
+        pomsky!(Start "true" End|Start "false" End),
+        pomsky!(Start "if" End),
+        pomsky!(Start "while" End),
+        pomsky!(Start "for" End),
+        pomsky!(Start "until" End),
+        pomsky!(Start "step" End),
+        pomsky!(Start "fun" End),
+        pomsky!(Start "equals" End),
+        pomsky!(Start "different" End),
+        pomsky!(Start "greater" End),
+        pomsky!(Start "less" End),
         pomsky!(["A"-"z"] [word]+), //Variable
     ])
     .unwrap();
@@ -42,7 +51,7 @@ fn tokenized_word(word: &str) -> Word {
             word: word.to_string(),
         },
         1 => Word {
-            token: Token::INTEGER,
+            token: Token::STRING,
             word: word.to_string(),
         },
         2 => Word {
@@ -50,7 +59,7 @@ fn tokenized_word(word: &str) -> Word {
             word: word.to_string(),
         },
         3 => Word {
-            token: Token::STRING,
+            token: Token::INTEGER,
             word: word.to_string(),
         },
         4 => Word {
@@ -70,10 +79,34 @@ fn tokenized_word(word: &str) -> Word {
             word: word.to_string(),
         },
         8 => Word {
-            token: Token::FUNCTION,
+            token: Token::UNTIL,
             word: word.to_string(),
         },
         9 => Word {
+            token: Token::STEP,
+            word: word.to_string(),
+        },
+        10 => Word {
+            token: Token::FUNCTION,
+            word: word.to_string(),
+        },
+        11 => Word {
+            token: Token::EQUALS,
+            word: word.to_string(),
+        },
+        12 => Word {
+            token: Token::DIFFERENT,
+            word: word.to_string(),
+        },
+        13 => Word {
+            token: Token::GREATER,
+            word: word.to_string(),
+        },
+        14 => Word {
+            token: Token::LESS,
+            word: word.to_string(),
+        },
+        15 => Word {
             token: Token::VARIABLE,
             word: word.to_string(),
         },
@@ -101,6 +134,12 @@ enum Token {
     CONDITIONAL,
     WHILELOOP,
     FORLOOP,
+    UNTIL,
+    STEP,
     FUNCTION,
+    EQUALS,
+    DIFFERENT,
+    GREATER,
+    LESS,
     ERROR
 }

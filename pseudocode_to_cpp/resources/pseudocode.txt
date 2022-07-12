@@ -1,4 +1,10 @@
-hola <- 123
-variablepro <- 321
+trueElement3 <- 23
+another <- "Hola"
+boolean <- true
+floatElement <- 23.2
 
-ma <- "Hola"
+if 2 equals 2
+
+while 3 less boolean
+
+for element until 23 step 3
