@@ -1,19 +1,16 @@
+use std::fmt::{Display};
+
 use pomsky_macro::pomsky;
 use regex::{Regex, RegexSet};
 
 // In this case, i will use a enum in order to tokenize the elements of the pseudocode.
 // This function takes a Vec of strings, that are the lines of the psudocode file.
-pub fn plain_text_to_tokenized_code(pseudocode_lines: Box<Vec<String>>) {
+pub fn plain_text_to_tokenized_code(pseudocode_lines: Box<Vec<String>>) -> Vec<Vec<Word>> {
     let document: Vec<Vec<Word>> = pseudocode_lines
         .iter()
         .map(|line| tokenized_line(line.to_string()))
         .collect();
-    for line in document.iter() {
-        for word in line.iter() {
-            print!("{:?} ", word.token);
-        }
-        println!("{}", "");
-    }
+    document
 }
 
 fn tokenized_line(line: String) -> Vec<Word> {
@@ -27,86 +24,71 @@ fn tokenized_line(line: String) -> Vec<Word> {
 fn tokenized_word(word: &str) -> Word {
     let regex_exp = RegexSet::new(&[
         pomsky!(Start "<-" End),
-        pomsky!(Start '"' [word]* '"' End),
-        pomsky!(Start [digit]+ '.'|',' [digit]+ End),
-        pomsky!(Start [digit]+ End),
-        pomsky!(Start "true" End|Start "false" End),
+        pomsky!(Start( ("true"|"false") | ([digit]+) | ([digit]+ ('.'|',') [digit]+) | ('"' [word]* '"') )End),
         pomsky!(Start "if" End),
         pomsky!(Start "while" End),
         pomsky!(Start "for" End),
         pomsky!(Start "until" End),
         pomsky!(Start "step" End),
         pomsky!(Start "fun" End),
-        pomsky!(Start "equals" End),
-        pomsky!(Start "different" End),
-        pomsky!(Start "greater" End),
-        pomsky!(Start "less" End),
+        pomsky!(Start ("equals"|"different"|"gratter"|"less") End),
+        pomsky!(Start ("+"|"-"|"*"|"/") End),
+        pomsky!(Start "end" End),
+        pomsky!(Start "print" End),
         pomsky!(["A"-"z"] [word]+), //Variable
     ])
     .unwrap();
     let matches: Vec<_> = regex_exp.matches(word).into_iter().collect();
-    match matches.first().unwrap() {
+    match matches.first().unwrap_or(&100) {
         0 => Word {
             token: Token::ASIGNATION,
             word: word.to_string(),
         },
         1 => Word {
-            token: Token::STRING,
+            token: Token::LITERALVALUE,
             word: word.to_string(),
         },
         2 => Word {
-            token: Token::FLOAT,
-            word: word.to_string(),
-        },
-        3 => Word {
-            token: Token::INTEGER,
-            word: word.to_string(),
-        },
-        4 => Word {
-            token: Token::BOOLEAN,
-            word: word.to_string(),
-        },
-        5 => Word {
             token: Token::CONDITIONAL,
             word: word.to_string(),
         },
-        6 => Word {
+        3 => Word {
             token: Token::WHILELOOP,
             word: word.to_string(),
         },
-        7 => Word {
+        4 => Word {
             token: Token::FORLOOP,
             word: word.to_string(),
         },
-        8 => Word {
+        5 => Word {
             token: Token::UNTIL,
             word: word.to_string(),
         },
-        9 => Word {
+        6 => Word {
             token: Token::STEP,
             word: word.to_string(),
         },
-        10 => Word {
+        7 => Word {
             token: Token::FUNCTION,
             word: word.to_string(),
         },
-        11 => Word {
-            token: Token::EQUALS,
+        8 => Word {
+            token: Token::COMPARATOR,
+            word: word.to_string(),
+        },
+        9 => Word{
+            token:Token::OPERATOR,
+            word: word.to_string()
+        },
+        10 => Word {
+            token: Token::END,
+            word: word.to_string(),
+        },
+        11 => Word{
+            token: Token::PRINTER,
             word: word.to_string(),
         },
         12 => Word {
-            token: Token::DIFFERENT,
-            word: word.to_string(),
-        },
-        13 => Word {
-            token: Token::GREATER,
-            word: word.to_string(),
-        },
-        14 => Word {
-            token: Token::LESS,
-            word: word.to_string(),
-        },
-        15 => Word {
             token: Token::VARIABLE,
             word: word.to_string(),
         },
@@ -118,18 +100,36 @@ fn tokenized_word(word: &str) -> Word {
 }
 
 #[derive(Debug)]
-struct Word {
-    token: Token,
-    word: String,
+pub struct Word {
+    pub token: Token,
+    pub word: String,
+}
+
+impl Display for Token{
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match *self {
+            Token::ASIGNATION => write!(f, "ASIGNATION"),
+            Token::LITERALVALUE => write!(f, "LITERALVALUE"),
+            Token::VARIABLE => write!(f, "VARIABLE"),
+            Token::CONDITIONAL => write!(f,"CONDITIONAL"),
+            Token::WHILELOOP => write!(f, "WHILELOOP"),
+            Token::FORLOOP => write!(f, "FORLOOP"),
+            Token::UNTIL => write!(f, "UNTIL"),
+            Token::STEP => write!(f, "STEP"),
+            Token::FUNCTION => write!(f,"FUNCTION"),
+            Token::COMPARATOR => write!(f, "COMPARATOR"),
+            Token::OPERATOR => write!(f, "OPERATOR"),
+            Token::END => write!(f, "END"),
+            Token::PRINTER => write!(f, "PRINTER"),
+            Token::ERROR => write!(f, "ERROR"),
+        }
+    }
 }
 
 #[derive(Debug)]
-enum Token {
+pub enum Token {
     ASIGNATION,
-    INTEGER,
-    FLOAT,
-    STRING,
-    BOOLEAN,
+    LITERALVALUE,
     VARIABLE,
     CONDITIONAL,
     WHILELOOP,
@@ -137,9 +137,9 @@ enum Token {
     UNTIL,
     STEP,
     FUNCTION,
-    EQUALS,
-    DIFFERENT,
-    GREATER,
-    LESS,
+    COMPARATOR,
+    OPERATOR,
+    END,
+    PRINTER,
     ERROR
 }
