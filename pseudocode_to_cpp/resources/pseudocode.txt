@@ -1,10 +1,12 @@
-trueElement3 <- 23
-another <- "Hola"
-boolean <- true
-floatElement <- 23.2
+counter <- 2
 
-if 2 equals 2
+for index until 10 step 2
+  counter <- counter + 1
+end
 
-while 3 less boolean
+while counter equals 2
+  print "Hi_MOM"
+  print "xd xd"
 
-for element until 23 step 3
+  
+
