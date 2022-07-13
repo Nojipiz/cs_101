@@ -1,7 +1,8 @@
-use std::{fmt::{Display}, ops::Add};
+use std::fmt::Display;
 
 use pomsky_macro::pomsky;
 use regex::{Regex, RegexSet};
+
 
 // In this case, i will use a enum in order to tokenize the elements of the pseudocode.
 // This function takes a Vec of strings, that are the lines of the psudocode file.
@@ -18,21 +19,30 @@ fn tokenized_line(line: String) -> Vec<Word> {
     let lines_filtered = filter_white_spaces.replace_all(&line, " ");
     let plain_words: Vec<&str> = lines_filtered.split(" ").collect();
     let words = wrap_literal_strings(Box::new(plain_words));
-    words.into_iter().map(|word| tokenized_word(word)).collect()
+    words.into_iter().map(|word| tokenized_word(&word)).collect()
 }
 
-fn wrap_literal_strings(words: Box<Vec<&str>>) -> Vec<&str>{
-    let mut wrapped_words:Vec<&str> = vec![];
-    let mut last_string_element:Box<String> = Box::new(String::from(""));
+fn wrap_literal_strings(words: Box<Vec<&str>>) -> Vec<String>{
+    let mut wrapped_words:Vec<String> = vec![];
+    let mut last_string_element:String = String::new();
     for word in words.iter() {
-        if (last_string_element).is_empty() {
-            if word.contains(" ") {
-                last_string_element.add("");
+        if last_string_element.is_empty() {
+            if word.contains("\"") && !words.last().unwrap().eq(word){
+                last_string_element.push_str(*word);
+            }else{
+               wrapped_words.push(word.to_string());
             }
         }
-        wrapped_words.push(*word);
+        else{
+            last_string_element.push_str(*word);
+            if word.contains("\"") {
+                wrapped_words.push(last_string_element.clone());
+                last_string_element.clear();
+                continue;
+            }
+        }
     }
-    *words
+    wrapped_words
 }
 
 fn tokenized_word(word: &str) -> Word {
