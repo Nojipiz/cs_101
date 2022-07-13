@@ -1,3 +1,7 @@
-element <- "Ho"  
-element <- 123  
-element <- "Ho h1"  
+element <- "Ho h1 asdasia "  
+while 2 less 22
+end
+for index until 200 step 2
+end
+fun aasds
+end
