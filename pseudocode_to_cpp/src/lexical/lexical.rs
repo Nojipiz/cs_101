@@ -15,7 +15,7 @@ pub fn plain_text_to_tokenized_code(pseudocode_lines: Box<Vec<String>>) -> Vec<V
 }
 
 fn tokenized_line(line: String) -> Vec<Word> {
-    let filter_white_spaces = Regex::new(pomsky!([space]+)).unwrap();
+    let filter_white_spaces = Regex::new(pomsky!( [space]+)).unwrap();
     let lines_filtered = filter_white_spaces.replace_all(&line, " ");
     let plain_words: Vec<&str> = lines_filtered.split(" ").collect();
     let words = wrap_literal_strings(Box::new(plain_words));
