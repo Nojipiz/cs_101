@@ -1,7 +1,5 @@
-element <- "Ho h1 asdasia "  
-while 2 less 22
-end
-for index until 200 step 2
-end
-fun aasds
-end
+element <- "Hohasdasia"  
+element <- 12346  
+element <- 12.346  
+element <- 12,346  
+element <- true
