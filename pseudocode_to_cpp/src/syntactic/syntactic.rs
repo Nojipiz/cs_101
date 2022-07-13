@@ -1,24 +1,21 @@
 use pomsky_macro::pomsky;
 use regex::RegexSet;
 
-use crate::lexical::lexical::{Token, Word};
+use crate::lexical::lexical::Word;
 
-pub fn check_syntaxis(document: Vec<Vec<Word>>) -> Vec<bool>{
-    let result = document.into_iter()
+pub fn check_syntaxis(document: &Vec<Vec<Word>>) -> Vec<bool>{
+    let results_list = document.into_iter()
             .map(|line| check_line(line))
             .collect::<Vec<bool>>();
-    for ele in result.iter() {
-        println!("{}", ele);
-    }
-    result
+    check_for_errors(&results_list);
+    results_list
 }
 
-fn check_line(line: Vec<Word>) -> bool{
+fn check_line(line: &Vec<Word>) -> bool{
     let tokens_of_line = line
         .into_iter()
         .map(|word| format!("{}", word.token))
         .collect::<String>();
-    println!("{}", tokens_of_line);
     let regex_exp = RegexSet::new(&[
         pomsky!(Start "VARIABLE" "ASIGNATION" ("LITERALVALUE"|"VARIABLE") End),
         pomsky!(Start "VARIABLE" "ASIGNATION" (("LITERALVALUE"|"VARIABLE") "OPERATOR" ("LITERALVALUE"|"VARIABLE")) End),
@@ -34,7 +31,15 @@ fn check_line(line: Vec<Word>) -> bool{
                                   .into_iter()
                                   .collect();
     return match matches.first().unwrap_or(&100) {
-        0|1|2|3|4|5|6|7|8 => true,
+        0|1|2|3|4|5|6|7|8|9 => true,
         _ => false
     }
+}
+
+
+fn check_for_errors(results_list:&Vec<bool>){
+    results_list.into_iter()
+                           .filter(|element| element == &&false)
+                           .enumerate()
+                           .for_each(|(index, _element)| println!("Error at line {}", index));
 }
