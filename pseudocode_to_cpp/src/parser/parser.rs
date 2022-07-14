@@ -53,7 +53,7 @@ fn variable_asignation_parse(line: &Vec<Word>) -> String{
             _ => strong_type_conversion(line),
         }
     }else{
-        format!("{} = {} {} {}", line[0].word, line[2].word, line[3].word, line[4].word)
+        format!("{} = {} {} {};", line[0].word, line[2].word, line[3].word, line[4].word)
     }
 }
 
