@@ -1,5 +1,13 @@
 element <- "Hohasdasia"  
 element <- 12346  
 element <- 12.346  
-element <- 12,346  
-element <- true
+while element equals 23
+end
+
+for 2 until 2 step 3
+
+end
+
+fun holama
+  print "xd"
+end
