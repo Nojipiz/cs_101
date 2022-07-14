@@ -1,3 +1,5 @@
+use std::fmt::format;
+
 use crate::lexical::lexical::Word;
 use crate::lexical::lexical::Token;
 
@@ -11,9 +13,36 @@ pub fn parser(document: &Vec<Vec<Word>>, lines_syntax: &Vec<usize>) -> Vec<Strin
 
 fn convert_line_to_cpp(line: &Vec<Word>, line_type:usize) -> String{
     match line_type {
-        0 => variable_asignation_parse(line),
-        1 => variable_asignation_parse(line),
-        _ => variable_asignation_parse(line),
+        0|1 => variable_asignation_parse(line),
+        2|3 => conditional_parse(line),
+        4 => for_loop_parse(line),
+        5 => format!("void {}()", line[1].word),
+        6 => String::from("}"),
+        7 => print_parse(line),
+        _ => String::from("ERROR")
+    }
+}
+
+fn print_parse(line: &Vec<Word>) -> String{
+   format!("std::cout << {}", line[1].word)
+}
+
+fn for_loop_parse(line: &Vec<Word>) -> String{
+    format!("for (int i = {}; i < {}; i+={})", line[1].word, line[3].word, line[5].word)
+}
+
+fn conditional_parse(line: &Vec<Word>) -> String{
+    if line.len() == 2 {
+        match line.first().unwrap().token {
+            Token::CONDITIONAL => format!("if ({})", line.last().unwrap().word),
+            _ => format!("while ({})", line.last().unwrap().word),
+        }
+    } else {
+        let comparator = convert_comparators(&line[2]);
+        match line.first().unwrap().token {
+            Token::CONDITIONAL => format!("if ({} {} {})", line[1].word, comparator, line[3].word),
+            _ => format!("while ({} {} {})", line[1].word, comparator, line[3].word),
+        }
     }
 }
 
@@ -24,7 +53,7 @@ fn variable_asignation_parse(line: &Vec<Word>) -> String{
             _ => strong_type_conversion(line),
         }
     }else{
-        String::from("xd")
+        format!("{} = {} {} {}", line[0].word, line[2].word, line[3].word, line[4].word)
     }
 }
 

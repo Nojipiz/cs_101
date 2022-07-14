@@ -21,7 +21,7 @@ fn check_line(line: &Vec<Word>) -> usize{
         pomsky!(Start "VARIABLE" "ASIGNATION" (("LITERALVALUE"|"VARIABLE") "OPERATOR" ("LITERALVALUE"|"VARIABLE")) End),
         pomsky!(Start ("CONDITIONAL"|"WHILELOOP") ("LITERALVALUE"|"VARIABLE") "COMPARATOR" ("LITERALVALUE"|"VARIABLE") End),
         pomsky!(Start ("CONDITIONAL"|"WHILELOOP") ("LITERALVALUE"|"VARIABLE") End),
-        pomsky!(Start "FORLOOP" "VARIABLE" "UNTIL" ("LITERALVALUE"|"VARIABLE") "STEP" ("LITERALVALUE"|"VARIABLE") End),
+        pomsky!(Start "FORLOOP" ("VARIABLE"|"LITERALVALUE") "UNTIL" ("LITERALVALUE"|"VARIABLE") "STEP" ("LITERALVALUE"|"VARIABLE") End),
         pomsky!(Start "FUNCTION" "VARIABLE" End),
         pomsky!(Start "END" End),
         pomsky!(Start "PRINTER" ("LITERALVALUE"|"VARIABLE") End),
