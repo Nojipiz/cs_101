@@ -1,7 +1,11 @@
 element <- "Hohasdasia"  
-element <- 12346  
+element <- 12346  + 123
 element <- 12.346  
 while element equals 23
+end
+
+while true
+
 end
 
 for 2 until 2 step 3
