@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+element <- "Hohasdasia"
+element <- "xd"
+=======
 element <- "Hohasdasia"  
 element <- 12346  + 123
 element <- 12.346  
@@ -15,3 +19,4 @@ end
 fun holama
   print "xd"
 end
+>>>>>>> da00a71 (Updated examples)
