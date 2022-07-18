@@ -1,22 +1,8 @@
-<<<<<<< HEAD
 element <- "Hohasdasia"
-element <- "xd"
-=======
-element <- "Hohasdasia"  
-element <- 12346  + 123
-element <- 12.346  
-while element equals 23
-end
 
-while true
+otro <- element + "xd"
 
-end
+otraCosa <- 123 + 123
 
-for 2 until 2 step 3
+otroElement <- otraCosa
 
-end
-
-fun holama
-  print "xd"
-end
->>>>>>> da00a71 (Updated examples)

@@ -36,7 +36,7 @@ fn check_line(line: &Vec<Word>) -> usize{
 
 fn check_for_errors(results_list:&Vec<usize>){
     results_list.into_iter()
-                           .filter(|element| element == &&100)
                            .enumerate()
+                           .filter(|(_index, element)| element == &&100)
                            .for_each(|(index, _element)| println!("Error at line {}", index));
 }
