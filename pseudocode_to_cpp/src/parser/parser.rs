@@ -8,7 +8,7 @@ pub fn parser(document: &Vec<Vec<Word>>, lines_syntax: &Vec<usize>) -> Vec<Strin
     document
         .into_iter()
         .enumerate()
-        .map(|(index, line)| convert_line_to_cpp(line, lines_syntax[index], &mut assigned_vars))
+        .map(|(index, line)| convert_line_to_cpp(line, lines_syntax[index], &mut assigned_vars).replace("&", "{"))
         .collect::<Vec<String>>()
 }
 
@@ -21,7 +21,7 @@ fn convert_line_to_cpp(
         0 | 1 => variable_asignation_parse(line, assigned_vars),
         2 | 3 => conditional_parse(line),
         4 => for_loop_parse(line),
-        5 => format!("void {}()", line[1].word),
+        5 => format!("void {}()&", line[1].word),
         6 => String::from("}"),
         7 => print_parse(line),
         _ => String::from("ERROR"),
@@ -34,7 +34,7 @@ fn print_parse(line: &Vec<Word>) -> String {
 
 fn for_loop_parse(line: &Vec<Word>) -> String {
     format!(
-        "for (int i = {}; i < {}; i+={})",
+        "for (int i = {}; i < {}; i+={})&",
         line[1].word, line[3].word, line[5].word
     )
 }
@@ -42,14 +42,14 @@ fn for_loop_parse(line: &Vec<Word>) -> String {
 fn conditional_parse(line: &Vec<Word>) -> String {
     if line.len() == 2 {
         match line.first().unwrap().token {
-            Token::CONDITIONAL => format!("if ({})", line.last().unwrap().word),
-            _ => format!("while ({})", line.last().unwrap().word),
+            Token::CONDITIONAL => format!("if ({})&", line.last().unwrap().word),
+            _ => format!("while ({})&", line.last().unwrap().word),
         }
     } else {
         let comparator = convert_comparators(&line[2]);
         match line.first().unwrap().token {
-            Token::CONDITIONAL => format!("if ({} {} {})", line[1].word, comparator, line[3].word),
-            _ => format!("while ({} {} {})", line[1].word, comparator, line[3].word),
+            Token::CONDITIONAL => format!("if ({} {} {})&", line[1].word, comparator, line[3].word),
+            _ => format!("while ({} {} {})&", line[1].word, comparator, line[3].word),
         }
     }
 }
@@ -124,7 +124,7 @@ fn variable_declaration_from_other_variable(
         .unwrap()
         .var_type;
     assigned_vars.push(Variables {name: line[0].word.clone(),var_type: variable_type.clone()});
-    format!("{} {} = {}", variable_type, line[0].word, line[2].word)
+    format!("{} {} = {};", variable_type, line[0].word, line[2].word)
 }
 
 fn variable_declaration_from_operation(
@@ -138,14 +138,14 @@ fn variable_declaration_from_operation(
         let variable_type:&Type = &get_variable_type(assigned_vars, first_element.unwrap());
         assigned_vars.push(Variables {name: line[0].word.clone(),var_type: variable_type.clone()});
         format!(
-            "{} {} = {} {} {}",
+            "{} {} = {} {} {};",
             variable_type, line[0].word, line[2].word, line[3].word, line[4].word
         )
     } else if second_element.is_some() {
         let variable_type:&Type = &get_variable_type(assigned_vars, second_element.unwrap());
         assigned_vars.push(Variables {name: line[0].word.clone(),var_type: variable_type.clone()});
         format!(
-            "{} {} = {} {} {}",
+            "{} {} = {} {} {};",
             variable_type, line[0].word, line[2].word, line[3].word, line[4].word
         )
     } else {
