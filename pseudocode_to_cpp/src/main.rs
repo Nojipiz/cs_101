@@ -1,6 +1,5 @@
 use std::env;
-
-use lexical::lexical::{plain_text_to_tokenized_code, Word};
+use lexical::lexical::plain_text_to_tokenized_code;
 use parser::parser::parser;
 use reader::reader::get_plain_pseudocode;
 use syntactic::syntactic::check_syntaxis;

@@ -23,7 +23,7 @@ pub fn write_file(document: Vec<String>) {
 fn get_first_function_index(document: &Vec<String>) -> usize{
     document
         .into_iter()
-        .position(|line| line.contains("void ")).unwrap_or(document.len()-1)
+        .position(|line| line.contains("void ")).unwrap_or(document.len())
 }
 
 fn get_standart_elements() -> String {

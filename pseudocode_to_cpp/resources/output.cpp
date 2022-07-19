@@ -1,19 +1,13 @@
 #include <iostream>
 using namespace std;
-void xd(){
-std::cout << "hola";
-}
-void other(){
-std::cout << "hola";
-}
 int main(){
-int counter = 0;
-while (counter < 10){
-std::cout << counter;
+int counter = 2;
+for (int i = counter; i < 20; i+=1){
 counter = counter + 1;
 }
-for (int i = 0; i < 3; i+=1){
-xd();
+int anotherCounter = 0;
+while (counter < 10){
+std::cout << "HelloWorld!";
 }
 return 0;
 }
