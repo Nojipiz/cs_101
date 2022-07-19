@@ -25,6 +25,7 @@ fn check_line(line: &Vec<Word>) -> usize{
         pomsky!(Start "FUNCTION" "VARIABLE" End),
         pomsky!(Start "END" End),
         pomsky!(Start "PRINTER" ("LITERALVALUE"|"VARIABLE") End),
+        pomsky!(Start "FUNCTIONCALL" End)
     ])
     .unwrap();
     let matches:Vec<_> = regex_exp.matches(&tokens_of_line)

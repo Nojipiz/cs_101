@@ -59,6 +59,7 @@ fn tokenized_word(word: &str) -> Word {
         pomsky!(Start ("+"|"-"|"*"|"/") End),
         pomsky!(Start "end" End),
         pomsky!(Start "print" End),
+        pomsky!(Start [word]+"()" End),
         pomsky!(["A"-"z"] [word]+), //Variable
     ])
     .unwrap();
@@ -112,7 +113,11 @@ fn tokenized_word(word: &str) -> Word {
             token: Token::PRINTER,
             word: word.to_string(),
         },
-        12 => Word {
+        12 => Word{
+            token: Token::FUNCTIONCALL,
+            word: word.to_string(),
+        },
+        13 => Word {
             token: Token::VARIABLE,
             word: word.to_string(),
         },
@@ -145,6 +150,7 @@ impl Display for Token{
             Token::OPERATOR => write!(f, "OPERATOR"),
             Token::END => write!(f, "END"),
             Token::PRINTER => write!(f, "PRINTER"),
+            Token::FUNCTIONCALL => write!(f, "FUNCTIONCALL"),
             Token::ERROR => write!(f, "ERROR"),
         }
     }
@@ -165,5 +171,6 @@ pub enum Token {
     OPERATOR,
     END,
     PRINTER,
+    FUNCTIONCALL,
     ERROR
 }

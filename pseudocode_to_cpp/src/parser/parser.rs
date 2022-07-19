@@ -1,4 +1,5 @@
 use std::fmt::Display;
+use std::fmt::format;
 
 use crate::lexical::lexical::Token;
 use crate::lexical::lexical::Word;
@@ -24,12 +25,13 @@ fn convert_line_to_cpp(
         5 => format!("void {}()&", line[1].word),
         6 => String::from("}"),
         7 => print_parse(line),
+        8 => format!("{};", line[0].word),
         _ => String::from("ERROR"),
     }
 }
 
 fn print_parse(line: &Vec<Word>) -> String {
-    format!("std::cout << {}", line[1].word)
+    format!("std::cout << {};", line[1].word)
 }
 
 fn for_loop_parse(line: &Vec<Word>) -> String {

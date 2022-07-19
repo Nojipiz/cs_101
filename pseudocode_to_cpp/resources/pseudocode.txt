@@ -1,7 +1,14 @@
-element <- 1
 counter <- 0
-
-for element until 20 step 1
-  counter <- counter + 1 
+while counter less 10
+  print counter
+  counter <- counter + 1
 end
-
+for 0 until 3 step 1
+  xd()
+end
+fun xd
+  print "hola"
+end
+fun other
+  print "hola"
+end
