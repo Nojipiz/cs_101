@@ -1,5 +1,8 @@
 #include <iostream>
 using namespace std;
+void myFunction(){
+std::cout << "Thisismyfunction";
+}
 int main(){
 int counter = 2;
 for (int i = counter; i < 20; i+=1){

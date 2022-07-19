@@ -7,3 +7,7 @@ anotherCounter <- 0
 while counter less 10
     print "Hello World!"
 end
+
+fun myFunction
+  print "This is my function"
+end
