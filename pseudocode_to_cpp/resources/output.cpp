@@ -1,4 +1,7 @@
-string element = "Hohasdasia";
-string otro = element + "xd"
-int otraCosa = 123 + 123;
-int otroElement = otraCosa
+#include <iostream>
+using namespace std;
+int element = 1;
+int counter = 0;
+for (int i = element; i < 20; i+=1){
+counter = counter + 1;
+}

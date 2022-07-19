@@ -1,8 +1,7 @@
-element <- "Hohasdasia"
+element <- 1
+counter <- 0
 
-otro <- element + "xd"
-
-otraCosa <- 123 + 123
-
-otroElement <- otraCosa
+for element until 20 step 1
+  counter <- counter + 1 
+end
 
