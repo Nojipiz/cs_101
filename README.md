@@ -1,6 +1,9 @@
-# Homeworks of Formal Languages 2022 :bookmark_tabs:
+# Homeworks of the closest classes to computer science at UPTC :bookmark_tabs:
 
 Some homeworks of the class at UPTC, you can grab this projects as a example for the homeworks. :grin:
+
+## Why Scala?
+I just hate java :D
 
 ## Why Rust?
 I have choosed rust for this projects because i want to improve my structured programming skills in order to produce blazingly fast code in a modern way with C performance and... Just see Ferris the crab! is so f*cking cute! :3
