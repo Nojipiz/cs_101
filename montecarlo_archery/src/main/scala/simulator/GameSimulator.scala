@@ -23,9 +23,15 @@ def getCompetitors(teamName:String):List[Competitor] =
 
 def runSimulation(amountOfGames: Int): Unit = {
   val teams:List[Team] = getTeams()
-  val simulations:IndexedSeq[Unit] = 0.until(amountOfGames).map(element => 
-      print(element)
+  val simulations:IndexedSeq[Game] = 0.until(amountOfGames).map(element => 
+      Game(
+        runRounds(teams)
+      )
   )
-  println(teams)
+  println(simulations)
 }
-  
+
+def runRounds(teams:List[Team]): List[Round] =
+  0.until(10).map( index => 
+    Round(teams)
+  ).toList
