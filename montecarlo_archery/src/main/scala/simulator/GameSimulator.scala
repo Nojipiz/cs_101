@@ -1,7 +1,7 @@
 package simulator
 
 import domain._
-import simulator.Verificators.checkifSomeoneStillResistance
+import utils._
 import scala.util.Random.apply
 import scala.util.Random
 
@@ -41,8 +41,8 @@ def simulateRounds(competitors:List[Competitor], historyRounds:List[Round]):List
       simulateCompetitorRound(competitor)
     )
     val currentRound = Round(shoots)
-    val updatedHistory = historyRounds :+ currentRound
-    return simulateRounds(competitors, updatedHistory)
+    val updatedHistory:List[Round] = historyRounds :+ currentRound
+    return simulateRounds(competitors.getTired(), updatedHistory)
   }
   return historyRounds
 }
