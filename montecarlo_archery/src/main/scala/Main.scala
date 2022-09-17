@@ -1,6 +1,6 @@
 import simulator.runSimulation
 
 @main def hello: Unit = {
-  runSimulation(20)
+  runSimulation(2)
 }
 

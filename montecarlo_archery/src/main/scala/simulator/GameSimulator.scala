@@ -1,37 +1,54 @@
 package simulator
 
 import domain._
+import simulator.Verificators.checkifSomeoneStillResistance
 import scala.util.Random.apply
 import scala.util.Random
 
-def getTeams(): List[Team] = 
-  List(
-    Team(name = TeamName.TeamA, competitors = getCompetitors(TeamName.TeamA.name)),
-    Team(name = TeamName.TeamB, competitors = getCompetitors(TeamName.TeamB.name))
-  )
-
-def getCompetitors(teamName:String):List[Competitor] = 
-  0.until(TEAM_MEMBERS).map(index => 
-      Competitor(
-        name = s"Competitor ${index+1} $teamName",
-        resistance = PseudoRandomState.getResistance(), 
-        experience = COMPETITOR_EXPERIENCE,
-        luck = PseudoRandomState.getLuck(),
-        gender = PseudoRandomState.getGender() 
-      )
-  ).toList
-
-def runSimulation(amountOfGames: Int): Unit = {
-  val teams:List[Team] = getTeams()
-  val simulations:IndexedSeq[Game] = 0.until(amountOfGames).map(element => 
-      Game(
-        runRounds(teams)
-      )
-  )
-  println(simulations)
+def simulateShoot(competitor: Competitor):Shoot = {
+  val updatedCompetitor = Competitor(
+    team = competitor.team,
+    name = competitor.name, 
+    resistance = competitor.resistance - SHOOT_RESISTANCE_COST,
+    experience = competitor.experience,
+    luck = competitor.luck,
+    gender = competitor.gender,
+    score = competitor.score + 1
+    )
+  Shoot(updatedCompetitor) 
 }
 
-def runRounds(teams:List[Team]): List[Round] =
-  0.until(10).map( index => 
-    Round(teams)
-  ).toList
+def simulateShoots(historyShoot:List[Shoot]):List[Shoot] = {
+  val current:Shoot = simulateShoot(historyShoot.last.competitorState)
+  val updatedHistoryShoots:List[Shoot] = historyShoot :+ current
+  if(current.competitorState.resistance < 5)
+    return updatedHistoryShoots;
+  return simulateShoots(updatedHistoryShoots)
+}
+
+def simulateCompetitorRound(competitor: Competitor):CompetitorRound = {
+  val initialShoot = simulateShoot(competitor)
+  val shoots = simulateShoots(List(initialShoot))
+  CompetitorRound(
+    competitor,
+    shoots
+  )
+}
+
+def simulateRounds(competitors:List[Competitor], historyRounds:List[Round]):List[Round] = {
+  if(competitors.checkifSomeoneStillResistance()){
+    val shoots = competitors.map(competitor => 
+      simulateCompetitorRound(competitor)
+    )
+    val currentRound = Round(shoots)
+    val updatedHistory = historyRounds :+ currentRound
+    return simulateRounds(competitors, updatedHistory)
+  }
+  return historyRounds
+}
+
+def runSimulation(amountOfGames: Int): Unit = {
+  val competitors = getAllCompetitors()
+  val round = simulateRounds(competitors, List())
+  print(round)
+}

@@ -1,11 +1,13 @@
 package domain
 
 case class Competitor(
-  val name:String,
-  val resistance: Int,
-  var experience: Int,
-  var luck: Float,
-  val gender: Gender,
+  team: TeamName,
+  name:String,
+  resistance: Int,
+  experience: Int,
+  luck: Float,
+  gender: Gender,
+  score: Int
 )
 
 enum Gender: 
