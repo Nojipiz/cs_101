@@ -1,5 +1,6 @@
 package domain
 
 case class Round(
-  playersRounds: List[CompetitorRound]
+    playersRounds: List[CompetitorRound],
+    extraShoots: List[Shoot]
 )

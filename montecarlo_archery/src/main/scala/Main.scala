@@ -1,6 +1,3 @@
 import simulator.runSimulation
 
-@main def hello: Unit = {
-  runSimulation(2)
-}
-
+@main def hello = runSimulation(2)

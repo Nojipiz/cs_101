@@ -1,5 +1,5 @@
 package domain
 
 case class Game(
-  rounds: List[Round],
+    rounds: List[Round]
 )
