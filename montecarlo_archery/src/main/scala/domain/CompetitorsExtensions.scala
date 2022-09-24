@@ -2,6 +2,7 @@ package simulator
 
 import domain._
 import simulator.PseudoRandomState
+import spire.math.Complex.apply
 
 extension (comp: List[Competitor]) {
   def checkifSomeoneStillResistance(): Boolean =
@@ -9,17 +10,11 @@ extension (comp: List[Competitor]) {
       .find(competitor => competitor.resistance >= SHOOT_RESISTANCE_COST)
       .isDefined
 
-  def getTired(): List[Competitor] =
+  def getTiredAndNewLuck(): List[Competitor] =
     comp.map(competitor =>
-      Competitor(
-        team = competitor.team,
-        name = competitor.name,
-        resistance = competitor.resistance - PseudoRandomState
-          .getTiredness(),
-        experience = competitor.experience,
-        luck = PseudoRandomState.getLuck(),
-        gender = competitor.gender,
-        score = competitor.score
+      competitor.copy(
+        resistance = competitor.resistance - PseudoRandomState.getTiredness(),
+        luck = PseudoRandomState.getLuck()
       )
     )
 
@@ -44,5 +39,10 @@ extension (comp: List[Competitor]) {
       val timesInARow: Int = comp.takeRight(4).count(_ == competitor)
       return notInFirst && (timesInARow == 2)
     }
+  }
+
+  def getBestOfMatch(): List[Competitor] = {
+    val maxScore = comp.map(_.score).max
+    comp.filter(_.score == maxScore)
   }
 }

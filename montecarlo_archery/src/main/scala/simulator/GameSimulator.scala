@@ -58,15 +58,31 @@ def simulateCompetitorRound(competitor: Competitor): CompetitorRound = {
   )
 }
 
+def simulateTieBreakerForBest(bests: List[Competitor]): Competitor = {
+  val shoots = bests.map(competitor => simulateShoot(competitor))
+  val tieBreakerBest: List[Competitor] = shoots.map(_.competitorState).getBestOfMatch()
+  if (tieBreakerBest.length > 1)
+    simulateTieBreakerForBest(bests)
+  else
+    tieBreakerBest.last
+}
+
+def updateCompetitorsStatisticsAfterRound(competitors: List[Competitor]): List[Competitor] = {
+  val tiredAndLuckyCompetitors = competitors.getTiredAndNewLuck()
+  val bestsOfMatch = competitors.getBestOfMatch()
+  val best: Competitor = if (bestsOfMatch.length == 1) bestsOfMatch.last else simulateTieBreakerForBest(bestsOfMatch)
+  tiredAndLuckyCompetitors.map { case best => best.copy(experience = best.experience + SCORE_FOR_WIN_ROUND) }
+}
+
 def simulateRounds(competitors: List[Competitor], historyRounds: List[Round], round: Int): List[Round] = {
   if (competitors.checkifSomeoneStillResistance() && round <= 10) {
     val shoots = competitors.map(competitor => simulateCompetitorRound(competitor))
     val shootsOfLuckiest: List[Shoot] = simulateExtraShootForLuckiests(historyRounds, competitors)
     val currentRound = Round(shoots, shootsOfLuckiest)
     val updatedHistory: List[Round] = historyRounds :+ currentRound
-    val tiredCompetitors = competitors.getTired()
+    val updatedCompetitors = updateCompetitorsStatisticsAfterRound(competitors)
     return simulateRounds(
-      tiredCompetitors,
+      updatedCompetitors,
       updatedHistory,
       round + 1
     )
@@ -74,8 +90,8 @@ def simulateRounds(competitors: List[Competitor], historyRounds: List[Round], ro
   return historyRounds
 }
 
-def runSimulation(amountOfGames: Int): Unit = {
+def runSimulation(amountOfGames: Int): Game = {
   val competitors = getAllCompetitors()
-  val round = simulateRounds(competitors, List(), 0)
-  print(round)
+  val rounds = simulateRounds(competitors, List(), 0)
+  Game(rounds)
 }
