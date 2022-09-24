@@ -9,7 +9,9 @@ import breeze.stats.distributions.Rand.VariableSeed.randBasis
 object PseudoRandomState {
 
   val gaussianDist = Gaussian(mu = COMPETITOR_RESISTANCE_MEAN, sigma = COMPETITOR_RESISTANCE_DESV)
-  val randomGenerator: Random = Random()
+  private val randomGenerator: Random = Random()
+  private val maleMontecarloRandomGenerator: Random = Random()
+  private val femaleMontecarloRandomGenerator: Random = Random()
 
   def getBoolean(): Boolean = randomGenerator.nextBoolean()
 
@@ -23,4 +25,28 @@ object PseudoRandomState {
 
   def getTiredness(): Int =
     return if (getBoolean()) 1 else 2
+
+  def getMaleMontecarloShoot(): Int = {
+    val shootValue = maleMontecarloRandomGenerator.nextInt(100)
+    if (shootValue < 20)
+      10
+    else if (shootValue < 53)
+      9
+    else if (shootValue < 93)
+      8
+    else
+      0
+  }
+
+  def getFemaleMontecarloShoot(): Int = {
+    val shootValue = femaleMontecarloRandomGenerator.nextInt(100)
+    if (shootValue < 30)
+      10
+    else if (shootValue < 68)
+      9
+    else if (shootValue < 95)
+      8
+    else
+      0
+  }
 }

@@ -1,3 +1,5 @@
 import simulator.runSimulation
 
-@main def hello = runSimulation(2)
+@main def hello = {
+  runSimulation(2)
+}
