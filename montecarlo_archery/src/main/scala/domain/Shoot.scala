@@ -1,5 +1,6 @@
 package domain
 
 case class Shoot(
-    competitorState: Competitor
+    competitorState: Competitor,
+    isThreeInARowShoot: Boolean
 )

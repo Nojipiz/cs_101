@@ -7,18 +7,27 @@ import scala.util.Random
 def simulateExtraShootForLuckiests(historyRounds: List[Round], competitors: List[Competitor]): List[Shoot] = {
   val (luckyA, luckyB) = competitors.getLuckiestEachTeam()
   val shoots: List[Shoot] = List(simulateShoot(luckyA), simulateShoot(luckyB))
-  val lastestLuckiests: List[Competitor] = historyRounds.drop(3).flatMap(_.extraShoots).map(_.competitorState);
-  val luckyACount: Int = lastestLuckiests.count(_ == luckyA)
-  val luckyBCount: Int = lastestLuckiests.count(_ == luckyB)
-  if (luckyACount >= 2)
-    shoots :+ simulateShoot(luckyA)
-  else if (luckyBCount >= 2)
-    shoots :+ simulateShoot(luckyB)
+  val lastestLuckiests: List[Competitor] = historyRounds.takeRight(3).flatMap(_.extraShoots).map(_.competitorState);
+  val extraShootLuckyA = lastestLuckiests.checkIfHasTwoLucksBefore(luckyA)
+  val extraShootLuckyB = lastestLuckiests.checkIfHasTwoLucksBefore(luckyB)
+  if (extraShootLuckyA)
+    shoots :+ simulateShoot(luckyA, true)
+  else if (extraShootLuckyB)
+    shoots :+ simulateShoot(luckyB, true)
   else
     shoots
 }
 
-def simulateShoot(competitor: Competitor): Shoot = {
+def simulateArrowWithMontecarlo(competitor: Competitor): Int = {
+  return competitor.gender match {
+    case Gender.Male =>
+      PseudoRandomState.getMaleMontecarloShoot()
+    case Gender.Female =>
+      PseudoRandomState.getFemaleMontecarloShoot()
+  }
+}
+
+def simulateShoot(competitor: Competitor, threeInARow: Boolean = false): Shoot = {
   val updatedCompetitor = Competitor(
     team = competitor.team,
     name = competitor.name,
@@ -26,9 +35,9 @@ def simulateShoot(competitor: Competitor): Shoot = {
     experience = competitor.experience,
     luck = competitor.luck,
     gender = competitor.gender,
-    score = competitor.score + 1
+    score = competitor.score + simulateArrowWithMontecarlo(competitor)
   )
-  Shoot(updatedCompetitor)
+  Shoot(updatedCompetitor, threeInARow)
 }
 
 def simulateShoots(historyShoot: List[Shoot]): List[Shoot] = {
@@ -42,7 +51,7 @@ def simulateShoots(historyShoot: List[Shoot]): List[Shoot] = {
 
 def simulateCompetitorRound(competitor: Competitor): CompetitorRound = {
   val initialShoot = simulateShoot(competitor)
-  val shoots = simulateShoots(List(initialShoot))
+  val shoots: List[Shoot] = simulateShoots(List(initialShoot))
   CompetitorRound(
     competitor,
     shoots
@@ -50,7 +59,7 @@ def simulateCompetitorRound(competitor: Competitor): CompetitorRound = {
 }
 
 def simulateRounds(competitors: List[Competitor], historyRounds: List[Round], round: Int): List[Round] = {
-  if (competitors.checkifSomeoneStillResistance() || round <= 10) {
+  if (competitors.checkifSomeoneStillResistance() && round <= 10) {
     val shoots = competitors.map(competitor => simulateCompetitorRound(competitor))
     val shootsOfLuckiest: List[Shoot] = simulateExtraShootForLuckiests(historyRounds, competitors)
     val currentRound = Round(shoots, shootsOfLuckiest)
