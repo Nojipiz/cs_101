@@ -10,7 +10,7 @@ import scalafx.application.Platform
 class ViewModel {
 
   val simulationGlobalResults: ObjectProperty[GlobalResults] = ObjectProperty(GlobalResults(None, None))
-  var lastSimulation: Game = Game(List())
+  var lastSimulation: List[Game] = List()
 
   def startSimulation(value: StringProperty): Unit = {
     if (value.isEmpty().get()) return

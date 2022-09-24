@@ -46,7 +46,7 @@ object StartView extends JFXApp3 {
   def WinnerTeam() = new VBox {
     val title = new Label("Equipo Ganador")
     val winnerName = new Label("Ninguno")
-    val winnerScore = new Label("0")
+    val winnerScore = new Label("Sin Score")
     viewModel.simulationGlobalResults.onChange { (_, _, results: GlobalResults) =>
       results.winnerTeam match {
         case Some(value) => {
@@ -56,6 +56,6 @@ object StartView extends JFXApp3 {
         case _ => print("No value")
       }
     }
-    children = winnerName
+    children = Seq(title, winnerName, winnerScore)
   }
 }

@@ -1,9 +1,10 @@
 package domain
 
-extension (game: Game) {
+extension (games: List[Game]) {
 
   def getWinnerTeam(): (TeamName, Int) = {
-    val competitorsStatesLast = game.rounds.last.playersRounds.map(_.initialState)
+    val competitorsStatesLast =
+      games.flatMap(_.rounds).flatMap(_.playersRounds).flatMap(_.shoots).map(_.competitorState)
     val scoreA: Option[Int] = competitorsStatesLast.filter(_.team == TeamName.TeamA).map(_.score).reduceOption(_ + _)
     val scoreB: Option[Int] = competitorsStatesLast.filter(_.team == TeamName.TeamB).map(_.score).reduceOption(_ + _)
 
@@ -18,7 +19,8 @@ extension (game: Game) {
   }
 
   def getWinnerGender(): (Gender, Int) = {
-    val competitorsStatesLast = game.rounds.last.playersRounds.map(_.initialState)
+    val competitorsStatesLast =
+      games.flatMap(_.rounds).flatMap(_.playersRounds).flatMap(_.shoots).map(_.competitorState)
     val scoreMales: Option[Int] = competitorsStatesLast.filter(_.gender == Gender.Male).map(_.score).reduceOption(_ + _)
     val scoreFemales: Option[Int] =
       competitorsStatesLast.filter(_.gender == Gender.Female).map(_.score).reduceOption(_ + _)
