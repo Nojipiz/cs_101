@@ -23,4 +23,26 @@ class ViewModel {
       )
     )
   }
+
+  def getLuckiestPlayerOfGame(game: String): String = {
+    val gameNumber: Option[Int] = game.toIntOption
+    gameNumber match {
+      case Some(value) => {
+        if (value > lastSimulation.length - 1) return "Nadie"
+        lastSimulation(value).getLuckiestPlayer().name
+      }
+      case _ => "Error converting"
+    }
+  }
+
+  def getMostExperiencedPlayerOfGame(game: String): String = {
+    val gameNumber: Option[Int] = game.toIntOption
+    gameNumber match {
+      case Some(value) => {
+        if (value > lastSimulation.length - 1) return "Nadie"
+        lastSimulation(value).getMostExperiencedPlayer().name
+      }
+      case _ => "Error converting"
+    }
+  }
 }

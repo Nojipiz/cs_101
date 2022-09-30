@@ -9,11 +9,12 @@ import scalafx.geometry._
 import scalafx.geometry.Pos._
 import scalafx.scene.paint.Color._
 import viewmodel.ViewModel
-import domain.Game
-import domain.Game
-import domain.GlobalResults
-import domain.GlobalResults
 import scalafx.application.Platform
+import domain._
+import scalafx.collections.ObservableArray
+import scalafx.collections.ObservableBuffer
+import javafx.event.ActionEvent
+import javafx.event.EventHandler
 
 object StartView extends JFXApp3 {
 
@@ -24,8 +25,14 @@ object StartView extends JFXApp3 {
       title.value = "Montecarlo Simulation"
       scene = new Scene {
         content = new BorderPane {
-          center = new HBox() {
-            children = Seq(GameAmountChooser(), WinnerTeam(), WinnerGender())
+          center = new VBox() {
+            children = Seq(
+              GameAmountChooser(),
+              new HBox {
+                children = Seq(WinnerTeam(), WinnerGender())
+              },
+              LuckiestCompetitorPerGame()
+            )
             alignment = CenterLeft
           }
         }
@@ -34,12 +41,10 @@ object StartView extends JFXApp3 {
   }
 
   def GameAmountChooser() = new HBox {
-    val gamesAmmountField = new TextField()
     children = Seq(
-      new Label("Cantidad de juegos"),
-      gamesAmmountField,
+      new Label("Cantidad de juegos = 10"),
       new Button("Iniciar") {
-        onAction = _ => viewModel.startSimulation(1)
+        onAction = _ => viewModel.startSimulation(10)
       }
     )
   }
@@ -72,5 +77,35 @@ object StartView extends JFXApp3 {
       }
     }
     children = Seq(title, winnerGender)
+  }
+
+  def LuckiestCompetitorPerGame() = new VBox {
+    val gameSelector = new TextField()
+    val luckiestCompetitor = new Label("")
+    val mostExperiencedCompetitor = new Label("")
+    gameSelector
+      .textProperty()
+      .addListener { (observable, oldValue, newValue) =>
+        if (!newValue.isBlank()) {
+          val luckiest = viewModel.getLuckiestPlayerOfGame(newValue)
+          luckiestCompetitor.setText(luckiest)
+          val experienced = viewModel.getMostExperiencedPlayerOfGame(newValue)
+          mostExperiencedCompetitor.setText(experienced)
+        }
+      };
+    children = Seq(
+      new Label("Seleccionar un juego") {
+        style = "-fx-font-weight: bold"
+      },
+      gameSelector,
+      new Label("Jugador con mas suerte") {
+        style = "-fx-font-weight: bold"
+      },
+      luckiestCompetitor,
+      new Label("Jugador con mas experiencia") {
+        style = "-fx-font-weight: bold"
+      },
+      mostExperiencedCompetitor
+    )
   }
 }
