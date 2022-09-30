@@ -49,4 +49,12 @@ extension (game: Game) {
     else
       (TeamName.TeamB, scoreB.getOrElse(-1))
   }
+
+  def getLuckiestPlayer(): Competitor =
+    game.rounds.flatMap(_.playersRounds).map(_.initialState).maxBy(_.luck)
+
+  def getMostExperiencedPlayer(): Competitor = {
+    val states = game.rounds.flatMap(_.playersRounds).map(_.initialState)
+    states.maxBy(_.experience)
+  }
 }
