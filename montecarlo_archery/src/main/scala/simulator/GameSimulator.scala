@@ -54,10 +54,10 @@ def simulateShoot(competitor: Competitor, threeInARow: Boolean = false): Shoot =
 
 def simulateShoots(historyShoot: List[Shoot]): List[Shoot] = {
   val current: Shoot = simulateShoot(historyShoot.last.competitorState)
+  if (current.competitorState.resistance < 5)
+    return historyShoot;
   val updatedHistoryShoots: List[Shoot] =
     historyShoot :+ current
-  if (current.competitorState.resistance < 5)
-    return updatedHistoryShoots;
   return simulateShoots(updatedHistoryShoots)
 }
 
@@ -71,10 +71,18 @@ def simulateCompetitorRound(competitor: Competitor): CompetitorRound = {
 }
 
 def updateCompetitorsStatisticsAfterRound(competitors: List[Competitor]): List[Competitor] = {
-  val tiredAndLuckyCompetitors = competitors.getTiredAndNewLuck()
   val bestsOfMatch = competitors.getBestOfMatch()
-  val best: Competitor = if (bestsOfMatch.length == 1) bestsOfMatch.last else simulateTieBreakerForBest(bestsOfMatch)
-  tiredAndLuckyCompetitors.map { case best => best.copy(experience = best.experience + SCORE_FOR_WIN_ROUND) }
+  val best: Competitor = if (bestsOfMatch.length == 1) {
+    bestsOfMatch(0)
+  } else {
+    simulateTieBreakerForBest(bestsOfMatch)
+  }
+  competitors
+    .map { competitor =>
+      if (competitor.name == best.name) competitor.copy(experience = competitor.experience + SCORE_FOR_WIN_ROUND)
+      else competitor
+    }
+    .getTiredAndNewLuck()
 }
 
 def simulateRounds(competitors: List[Competitor], historyRounds: List[Round], round: Int): List[Round] = {
