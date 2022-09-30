@@ -1,37 +1,52 @@
 package domain
 
+import simulator._
+
 extension (games: List[Game]) {
 
   def getWinnerTeam(): (TeamName, Int) = {
-    val competitorsStatesLast =
-      games.flatMap(_.rounds).flatMap(_.playersRounds).flatMap(_.shoots).map(_.competitorState)
-    val scoreA: Option[Int] = competitorsStatesLast.filter(_.team == TeamName.TeamA).map(_.score).reduceOption(_ + _)
-    val scoreB: Option[Int] = competitorsStatesLast.filter(_.team == TeamName.TeamB).map(_.score).reduceOption(_ + _)
+    val gamesResults = games.map(_.getWinnerTeam())
+    val scoreA: Option[Int] = gamesResults.filter(_._1 == TeamName.TeamA).map(_._2).reduceOption(_ + _)
+    val scoreB: Option[Int] = gamesResults.filter(_._1 == TeamName.TeamB).map(_._2).reduceOption(_ + _)
 
-    if (scoreA.isEmpty)
-      (TeamName.TeamB, scoreB.getOrElse(-1))
-    if (scoreB.isEmpty)
-      (TeamName.TeamA, scoreA.getOrElse(-1))
     if (scoreA.getOrElse(-1) > scoreB.getOrElse(-1))
       (TeamName.TeamA, scoreA.getOrElse(-1))
     else
       (TeamName.TeamB, scoreB.getOrElse(-1))
   }
 
-  def getWinnerGender(): (Gender, Int) = {
-    val competitorsStatesLast =
-      games.flatMap(_.rounds).flatMap(_.playersRounds).flatMap(_.shoots).map(_.competitorState)
-    val scoreMales: Option[Int] = competitorsStatesLast.filter(_.gender == Gender.Male).map(_.score).reduceOption(_ + _)
-    val scoreFemales: Option[Int] =
-      competitorsStatesLast.filter(_.gender == Gender.Female).map(_.score).reduceOption(_ + _)
+  def getWinnerGender(): Gender = {
+    val gamesWinner: List[Gender] = games.map(_.getMostWinsGender())
+    gamesWinner.groupBy(identity).mapValues(_.size).maxBy(_._2)._1
+  }
+}
 
-    if (scoreFemales.isEmpty)
-      (Gender.Male, scoreMales.getOrElse(-1))
-    if (scoreMales.isEmpty)
-      (Gender.Female, scoreFemales.getOrElse(-1))
-    if (scoreMales.getOrElse(-1) > scoreFemales.getOrElse(-1))
-      (Gender.Male, scoreMales.getOrElse(-1))
+extension (game: Game) {
+
+  def getMostWinsGender(): Gender = {
+    val bestOfEachRound: List[Competitor] = game.rounds.flatMap(_.playersRounds.map(_.initialState).getBestOfMatch())
+    val bestGenders: List[Gender] = bestOfEachRound.map(_.gender)
+    bestGenders.groupBy(identity).mapValues(_.size).maxBy(_._2)._1
+  }
+
+  def getWinnerTeam(): (TeamName, Int) = {
+    val playersLastRounds: List[CompetitorRound] = game.rounds.last.playersRounds
+    val scoreA: Option[Int] =
+      playersLastRounds
+        .map(_.shoots.last.competitorState)
+        .filter(_.team == TeamName.TeamA)
+        .map(_.score)
+        .reduceOption(_ + _)
+    val scoreB: Option[Int] =
+      playersLastRounds
+        .map(_.shoots.last.competitorState)
+        .filter(_.team == TeamName.TeamB)
+        .map(_.score)
+        .reduceOption(_ + _)
+
+    if (scoreA.getOrElse(-1) > scoreB.getOrElse(-1))
+      (TeamName.TeamA, scoreA.getOrElse(-1))
     else
-      (Gender.Female, scoreFemales.getOrElse(-1))
+      (TeamName.TeamB, scoreB.getOrElse(-1))
   }
 }

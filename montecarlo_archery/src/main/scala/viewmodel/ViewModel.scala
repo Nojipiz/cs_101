@@ -12,16 +12,7 @@ class ViewModel {
   val simulationGlobalResults: ObjectProperty[GlobalResults] = ObjectProperty(GlobalResults(None, None))
   var lastSimulation: List[Game] = List()
 
-  def startSimulation(value: StringProperty): Unit = {
-    if (value.isEmpty().get()) return
-    val rounds: Option[Int] = value.value.toIntOption
-    rounds match {
-      case Some(amount) => { executeSimulation(amount) }
-      case _            => print("Not an int")
-    }
-  }
-
-  def executeSimulation(amount: Int): Unit = {
+  def startSimulation(amount: Int): Unit = {
     lastSimulation = runSimulation(amount)
     val winnerTeam = lastSimulation.getWinnerTeam()
     val winnerGender = lastSimulation.getWinnerGender()
@@ -32,5 +23,4 @@ class ViewModel {
       )
     )
   }
-
 }

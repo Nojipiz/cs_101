@@ -13,6 +13,7 @@ import domain.Game
 import domain.Game
 import domain.GlobalResults
 import domain.GlobalResults
+import scalafx.application.Platform
 
 object StartView extends JFXApp3 {
 
@@ -24,7 +25,7 @@ object StartView extends JFXApp3 {
       scene = new Scene {
         content = new BorderPane {
           center = new HBox() {
-            children = Seq(GameAmountChooser(), WinnerTeam())
+            children = Seq(GameAmountChooser(), WinnerTeam(), WinnerGender())
             alignment = CenterLeft
           }
         }
@@ -38,24 +39,38 @@ object StartView extends JFXApp3 {
       new Label("Cantidad de juegos"),
       gamesAmmountField,
       new Button("Iniciar") {
-        onAction = _ => viewModel.startSimulation(gamesAmmountField.text)
+        onAction = _ => viewModel.startSimulation(1)
       }
     )
   }
 
   def WinnerTeam() = new VBox {
     val title = new Label("Equipo Ganador")
-    val winnerName = new Label("Ninguno")
-    val winnerScore = new Label("Sin Score")
+    val winnerTeamName = new Label("Ninguno")
+    val winnerTeam = new Label("Sin Score")
     viewModel.simulationGlobalResults.onChange { (_, _, results: GlobalResults) =>
       results.winnerTeam match {
         case Some(value) => {
-          winnerName.setText(value._1.toString())
-          winnerScore.setText(value._2.toString())
+          winnerTeamName.setText(value._1.toString())
+          winnerTeam.setText(value._2.toString())
         }
-        case _ => print("No value")
+        case _ => print("No Team value")
       }
     }
-    children = Seq(title, winnerName, winnerScore)
+    children = Seq(title, winnerTeamName, winnerTeam)
+  }
+
+  def WinnerGender() = new VBox {
+    val title = new Label("Genero Ganador")
+    val winnerGender = new Label("Ninguno")
+    viewModel.simulationGlobalResults.onChange { (_, _, results: GlobalResults) =>
+      results.winnerGender match {
+        case Some(value) => {
+          winnerGender.setText(value.toString())
+        }
+        case _ => print("No Team value")
+      }
+    }
+    children = Seq(title, winnerGender)
   }
 }
