@@ -1,0 +1,26 @@
+TODO Gana una ronda individual, el arquero de los dos equipos que sume más
+  puntos en sus lanzamientos, y en caso de empate, los contendientes tendrán
+  lanzamientos extra hasta determinar un ganador. Los puntos de estos
+  lanzamientos no serán tenidos en cuenta para el puntaje total de los grupos,
+  a su vez, estos lanzamientos no tendrán valor de resistencia.
+
+TODO Si un arquero suma 9 puntos de experiencia, pierde solamente un punto
+  resistencia en sus siguientes dos rondas, ya que sabe administrar mejor sus
+  lanzamientos
+
+TODO Gana una ronda grupal el equipo que obtenga más puntos en sus
+  lanzamientos. En caso de empate, no se determinará ganador.
+
+TODO El arquero que tenga más rondas ganadas en un juego, se declara ganador individual
+
+  Los equipos se enfrentarán en 20.000 juegos, teniendo en cuenta la evolución de los
+  personajes en términos de resistencia y experiencia hasta el final de cada juego, ya
+  que el factor de suerte deberá ser calculado al principio de cada una de las rondas,
+  para evitar el sesgo en el mismo.
+  Dado lo anterior se solicita:
+
+TODO Género con más victorias en cada juego
+
+TODO De la misma forma es importante realizar una gráfica de los puntos
+  obtenidos por cada uno de los jugadores vs juego, según los estimativos
+  brindados en clase
