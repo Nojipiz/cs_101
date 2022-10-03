@@ -67,4 +67,6 @@ class ViewModel {
       case _ => "Error converting"
     }
   }
+
+  def getCompetitorInformationOfGame(): Unit = {}
 }

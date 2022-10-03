@@ -11,11 +11,9 @@ import scalafx.scene.paint.Color._
 import viewmodel.ViewModel
 import scalafx.application.Platform
 import domain._
-import scalafx.collections.ObservableArray
+import scalafx.stage.Stage
+import scalafx.event.ActionEvent
 import scalafx.collections.ObservableBuffer
-import javafx.event.ActionEvent
-import javafx.event.EventHandler
-import javafx.collections.FXCollections
 
 object StartView extends JFXApp3 {
 
@@ -127,7 +125,19 @@ object StartView extends JFXApp3 {
 
   def CompetitorInformationDetail() = new VBox {
     val gameSelector = new TextField()
-    val competitors = FXCollections.observableArrayList("Player One", "Player Two")
+    val competitors =
+      ObservableBuffer(
+        "Competitor 1 TeamA",
+        "Competitor 2 TeamA",
+        "Competitor 3 TeamA",
+        "Competitor 4 TeamA",
+        "Competitor 5 TeamA",
+        "Competitor 1 TeamB",
+        "Competitor 2 TeamB",
+        "Competitor 3 TeamB",
+        "Competitor 4 TeamB",
+        "Competitor 5 TeamB"
+      )
     val competitorSelector = new ChoiceBox(competitors)
     children = Seq(
       new Label("Información de jugador") {
@@ -136,7 +146,12 @@ object StartView extends JFXApp3 {
       new Label("Juego"),
       gameSelector,
       new Label("Jugador"),
-      competitorSelector
+      competitorSelector,
+      new Button("Graficar Estadistica") {
+        onAction = _ => {
+          initCompetitorInformationView()
+        }
+      }
     )
   }
 }
