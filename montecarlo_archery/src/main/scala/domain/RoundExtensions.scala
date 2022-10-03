@@ -11,7 +11,6 @@ extension (rounds: List[Round]) {
         .flatMap(_.playersRounds)
         .filter(_.initialState.name == competitor.name)
         .map(_.initialState.experience)
-    println(lastRoundsExperience)
     return lastRoundsExperience match {
       case ValidFourElements(value)  => true
       case ValidThreeElements(value) => true
@@ -34,7 +33,6 @@ object ValidThreeElements {
     if (lastThree.count(_ == lastElement) > 1)
       return None
     if (isMultipleOfNineExperience(lastElement)) {
-      print("Valid")
       return Some(lastThree)
     }
     return None
@@ -58,7 +56,6 @@ object ValidFourElements {
     if (lastPossibleNumber - 3 != lastFour(1))
       return None
     if (isMultipleOfNineExperience(lastPossibleNumber)) {
-      print("Valid")
       return Some(lastFour)
     }
     return lastFour.takeRight(3) match {

@@ -42,9 +42,9 @@ object StartView extends JFXApp3 {
 
   def GameAmountChooser() = new HBox {
     children = Seq(
-      new Label("Cantidad de juegos = 10"),
+      new Label("Cantidad de juegos = 20000"),
       new Button("Iniciar") {
-        onAction = _ => viewModel.startSimulation(10)
+        onAction = _ => viewModel.startSimulation(20000)
       }
     )
   }
