@@ -1,7 +1,3 @@
-TODO Si un arquero suma 9 puntos de experiencia, pierde solamente un punto
-  resistencia en sus siguientes dos rondas, ya que sabe administrar mejor sus
-  lanzamientos
-
 TODO El arquero que tenga más rondas ganadas en un juego, se declara ganador individual
 
   Los equipos se enfrentarán en 20.000 juegos, teniendo en cuenta la evolución de los

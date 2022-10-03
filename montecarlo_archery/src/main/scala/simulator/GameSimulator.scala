@@ -40,13 +40,8 @@ def simulateTieBreakerForBest(bests: List[Competitor]): Competitor = {
 }
 
 def simulateShoot(competitor: Competitor, threeInARow: Boolean = false): Shoot = {
-  val updatedCompetitor = Competitor(
-    team = competitor.team,
-    name = competitor.name,
+  val updatedCompetitor = competitor.copy(
     resistance = competitor.resistance - SHOOT_RESISTANCE_COST,
-    experience = competitor.experience,
-    luck = competitor.luck,
-    gender = competitor.gender,
     score = competitor.score + simulateArrowWithMontecarlo(competitor)
   )
   Shoot(updatedCompetitor, threeInARow)
@@ -70,7 +65,10 @@ def simulateCompetitorRound(competitor: Competitor): CompetitorRound = {
   )
 }
 
-def updateCompetitorsStatisticsAfterRound(competitors: List[Competitor]): List[Competitor] = {
+def updateCompetitorsStatisticsAfterRound(
+    competitors: List[Competitor],
+    historyRounds: List[Round]
+): List[Competitor] = {
   val bestsOfMatch = competitors.getBestOfMatch()
   val best: Competitor = if (bestsOfMatch.length == 1) {
     bestsOfMatch(0)
@@ -82,7 +80,7 @@ def updateCompetitorsStatisticsAfterRound(competitors: List[Competitor]): List[C
       if (competitor.name == best.name) competitor.copy(experience = competitor.experience + SCORE_FOR_WIN_ROUND)
       else competitor
     }
-    .getTiredAndNewLuck()
+    .getTiredAndNewLuck(historyRounds)
 }
 
 def simulateRounds(competitors: List[Competitor], historyRounds: List[Round], round: Int): List[Round] = {
@@ -91,7 +89,7 @@ def simulateRounds(competitors: List[Competitor], historyRounds: List[Round], ro
     val shootsOfLuckiest: List[Shoot] = simulateExtraShootForLuckiests(historyRounds, competitors)
     val currentRound = Round(shoots, shootsOfLuckiest)
     val updatedHistory: List[Round] = historyRounds :+ currentRound
-    val updatedCompetitors = updateCompetitorsStatisticsAfterRound(competitors)
+    val updatedCompetitors = updateCompetitorsStatisticsAfterRound(competitors, historyRounds)
     return simulateRounds(
       updatedCompetitors,
       updatedHistory,

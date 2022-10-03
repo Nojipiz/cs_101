@@ -2,7 +2,6 @@ package simulator
 
 import domain._
 import simulator.PseudoRandomState
-import spire.math.Complex.apply
 
 extension (comp: List[Competitor]) {
   def checkifSomeoneStillResistance(): Boolean =
@@ -10,13 +9,17 @@ extension (comp: List[Competitor]) {
       .find(competitor => competitor.resistance >= SHOOT_RESISTANCE_COST)
       .isDefined
 
-  def getTiredAndNewLuck(): List[Competitor] =
-    comp.map(competitor =>
+  def getTiredAndNewLuck(
+      historyRounds: List[Round]
+  ): List[Competitor] =
+    comp.map(competitor => {
+      val shouldTireOne = historyRounds.thisCompetitorGetTiredOne(competitor)
+      val tiredness = if (shouldTireOne) 1 else PseudoRandomState.getTiredness()
       competitor.copy(
-        resistance = competitor.resistance - PseudoRandomState.getTiredness(),
+        resistance = competitor.resistance - tiredness,
         luck = PseudoRandomState.getLuck()
       )
-    )
+    })
 
   def getLuckiestEachTeam(): (Competitor, Competitor) = {
     val bestTeamA = comp
