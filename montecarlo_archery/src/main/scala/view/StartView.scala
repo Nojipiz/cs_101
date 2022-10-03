@@ -31,7 +31,7 @@ object StartView extends JFXApp3 {
               new HBox {
                 children = Seq(WinnerTeam(), WinnerGender())
               },
-              LuckiestCompetitorPerGame()
+              InformationCompetitorsPerGame()
             )
             alignment = CenterLeft
           }
@@ -79,10 +79,12 @@ object StartView extends JFXApp3 {
     children = Seq(title, winnerGender)
   }
 
-  def LuckiestCompetitorPerGame() = new VBox {
+  def InformationCompetitorsPerGame() = new VBox {
     val gameSelector = new TextField()
     val luckiestCompetitor = new Label("")
     val mostExperiencedCompetitor = new Label("")
+    val mostVictoriesGender = new Label("")
+    val winnerTeam = new Label("")
     gameSelector
       .textProperty()
       .addListener { (observable, oldValue, newValue) =>
@@ -91,6 +93,10 @@ object StartView extends JFXApp3 {
           luckiestCompetitor.setText(luckiest)
           val experienced = viewModel.getMostExperiencedPlayerOfGame(newValue)
           mostExperiencedCompetitor.setText(experienced)
+          val winnerGender = viewModel.getMostVictoriesGenderOfGame(newValue)
+          mostVictoriesGender.setText(winnerGender)
+          val winnerTeamText = viewModel.getWinnerTeam(newValue)
+          winnerTeam.setText(winnerTeamText)
         }
       };
     children = Seq(
@@ -105,7 +111,15 @@ object StartView extends JFXApp3 {
       new Label("Jugador con mas experiencia") {
         style = "-fx-font-weight: bold"
       },
-      mostExperiencedCompetitor
+      mostExperiencedCompetitor,
+      new Label("Genero con mas victorias") {
+        style = "-fx-font-weight: bold"
+      },
+      mostVictoriesGender,
+      new Label("Equipo Ganador") {
+        style = "-fx-font-weight: bold"
+      },
+      winnerTeam
     )
   }
 }

@@ -45,4 +45,26 @@ class ViewModel {
       case _ => "Error converting"
     }
   }
+
+  def getMostVictoriesGenderOfGame(game: String): String = {
+    val gameNumber: Option[Int] = game.toIntOption
+    gameNumber match {
+      case Some(value) => {
+        if (value > lastSimulation.length - 1) return "Ninguno"
+        lastSimulation(value).getMostWinsGender().toString()
+      }
+      case _ => "Error converting"
+    }
+  }
+
+  def getWinnerTeam(game: String): String = {
+    val gameNumber: Option[Int] = game.toIntOption
+    gameNumber match {
+      case Some(value) => {
+        if (value > lastSimulation.length - 1) return "Ninguno"
+        lastSimulation(value).getWinnerTeam()._1.toString()
+      }
+      case _ => "Error converting"
+    }
+  }
 }

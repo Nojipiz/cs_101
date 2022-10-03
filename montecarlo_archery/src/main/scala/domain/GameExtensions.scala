@@ -24,7 +24,8 @@ extension (games: List[Game]) {
 extension (game: Game) {
 
   def getMostWinsGender(): Gender = {
-    val bestOfEachRound: List[Competitor] = game.rounds.flatMap(_.playersRounds.map(_.initialState).getBestOfMatch())
+    val bestOfEachRound: List[Competitor] =
+      game.rounds.flatMap(_.playersRounds.flatMap(_.shoots).map(_.competitorState).getBestOfMatch())
     val bestGenders: List[Gender] = bestOfEachRound.map(_.gender)
     bestGenders.groupBy(identity).mapValues(_.size).maxBy(_._2)._1
   }
