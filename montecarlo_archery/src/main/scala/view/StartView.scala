@@ -15,6 +15,7 @@ import scalafx.collections.ObservableArray
 import scalafx.collections.ObservableBuffer
 import javafx.event.ActionEvent
 import javafx.event.EventHandler
+import javafx.collections.FXCollections
 
 object StartView extends JFXApp3 {
 
@@ -31,7 +32,8 @@ object StartView extends JFXApp3 {
               new HBox {
                 children = Seq(WinnerTeam(), WinnerGender())
               },
-              InformationCompetitorsPerGame()
+              InformationCompetitorsPerGame(),
+              CompetitorInformationDetail()
             )
             alignment = CenterLeft
           }
@@ -120,6 +122,21 @@ object StartView extends JFXApp3 {
         style = "-fx-font-weight: bold"
       },
       winnerTeam
+    )
+  }
+
+  def CompetitorInformationDetail() = new VBox {
+    val gameSelector = new TextField()
+    val competitors = FXCollections.observableArrayList("Player One", "Player Two")
+    val competitorSelector = new ChoiceBox(competitors)
+    children = Seq(
+      new Label("Información de jugador") {
+        style = "-fx-font-weight: bold"
+      },
+      new Label("Juego"),
+      gameSelector,
+      new Label("Jugador"),
+      competitorSelector
     )
   }
 }
