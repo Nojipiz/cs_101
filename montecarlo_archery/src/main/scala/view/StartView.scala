@@ -124,7 +124,6 @@ object StartView extends JFXApp3 {
   }
 
   def CompetitorInformationDetail() = new VBox {
-    val gameSelector = new TextField()
     val competitors =
       ObservableBuffer(
         "Competitor 1 TeamA",
@@ -143,13 +142,15 @@ object StartView extends JFXApp3 {
       new Label("Información de jugador") {
         style = "-fx-font-weight: bold"
       },
-      new Label("Juego"),
-      gameSelector,
       new Label("Jugador"),
       competitorSelector,
       new Button("Graficar Estadistica") {
         onAction = _ => {
-          initCompetitorInformationView()
+          val competitorIndex =
+            competitorSelector.getSelectionModel().selectedIndexProperty().value
+          val data =
+            viewModel.getCompetitorInformationOfGame(competitors(competitorIndex))
+          initCompetitorInformationView(data)
         }
       }
     )

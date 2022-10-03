@@ -19,6 +19,11 @@ extension (games: List[Game]) {
     val gamesWinner: List[Gender] = games.map(_.getMostWinsGender())
     gamesWinner.groupBy(identity).mapValues(_.size).maxBy(_._2)._1
   }
+
+  def getGamePointsOfCompetitor(competitorName: String): List[(Int, Int)] =
+    games.zipWithIndex.map((game: Game, index: Int) => {
+      (index, game.getTotalCompetitorScore(competitorName))
+    })
 }
 
 extension (game: Game) {
@@ -58,4 +63,12 @@ extension (game: Game) {
     val states = game.rounds.flatMap(_.playersRounds).map(_.initialState)
     states.maxBy(_.experience)
   }
+
+  def getTotalCompetitorScore(competitorName: String): Int =
+    game.rounds.last.playersRounds
+      .filter(_.initialState.name == competitorName)
+      .last
+      .shoots
+      .map(_.competitorState.score)
+      .reduce(_ + _)
 }

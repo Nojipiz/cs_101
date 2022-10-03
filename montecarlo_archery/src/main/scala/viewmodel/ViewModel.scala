@@ -68,5 +68,7 @@ class ViewModel {
     }
   }
 
-  def getCompetitorInformationOfGame(): Unit = {}
+  def getCompetitorInformationOfGame(competitorName: String): List[(Int, Int)] = {
+    lastSimulation.getGamePointsOfCompetitor(competitorName)
+  }
 }
