@@ -4,6 +4,9 @@ import domain._
 
 def getAllCompetitors(): List[Competitor] = getCompetitors(TeamName.TeamA) ++ getCompetitors(TeamName.TeamB)
 
+/*
+  Just the initial generator function, to give the competitors the start values. 
+*/
 private def getCompetitors(teamName: TeamName): List[Competitor] =
   0.until(5)
     .map(index =>

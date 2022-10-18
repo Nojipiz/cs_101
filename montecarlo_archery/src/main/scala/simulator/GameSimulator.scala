@@ -4,6 +4,12 @@ import utils._
 import scala.util.Random.apply
 import scala.util.Random
 
+/*
+  In this function, we check for the last 3 luckiest of each team, and checks if they has been the last luckiest for 2 times in a row in the rounds history.
+  If this happen, we gonna simulate another shoot fot this competitor.
+  (Juan, Juan, Pedro) -> This isn't valid
+  (Jose, Juan, Juan) -> This is valid, Juan wins an extra shoot
+*/
 def simulateExtraShootForLuckiests(historyRounds: List[Round], competitors: List[Competitor]): List[Shoot] = {
   val (luckyA, luckyB) = competitors.getLuckiestEachTeam()
   val shoots: List[Shoot] = List(simulateShoot(luckyA), simulateShoot(luckyB))
@@ -21,6 +27,9 @@ def simulateExtraShootForLuckiests(historyRounds: List[Round], competitors: List
     shoots
 }
 
+/*
+  The core function of the simulation, just calls to the random generator and gets a new number, that returns and this is the shoot score
+*/
 def simulateArrowWithMontecarlo(competitor: Competitor): Int = {
   return competitor.gender match {
     case Gender.Male =>
@@ -30,6 +39,10 @@ def simulateArrowWithMontecarlo(competitor: Competitor): Int = {
   }
 }
 
+/*
+  This function works in case of a tie between two of more players, and wee nee to determine the best.
+  So we run a simple shoot simulation until someone wins!
+*/
 def simulateTieBreakerForBest(bests: List[Competitor]): Competitor = {
   val shoots = bests.map(competitor => simulateShoot(competitor))
   val tieBreakerBest: List[Competitor] = shoots.map(_.competitorState).getBestOfMatch()
@@ -39,6 +52,10 @@ def simulateTieBreakerForBest(bests: List[Competitor]): Competitor = {
     tieBreakerBest.last
 }
 
+/*
+  This function creates a Shoot structure with the result of the simulation and the updated competitor state copy.
+  It's just the result of the Shoot
+*/
 def simulateShoot(competitor: Competitor, threeInARow: Boolean = false): Shoot = {
   val updatedCompetitor = competitor.copy(
     resistance = competitor.resistance - SHOOT_RESISTANCE_COST,
@@ -47,6 +64,9 @@ def simulateShoot(competitor: Competitor, threeInARow: Boolean = false): Shoot =
   Shoot(updatedCompetitor, threeInARow)
 }
 
+/*
+  Recursive function, it will push the competitors to shoot until they tire (or die in the worst of cases :c)
+*/
 def simulateShoots(historyShoot: List[Shoot]): List[Shoot] = {
   val current: Shoot = simulateShoot(historyShoot.last.competitorState)
   if (current.competitorState.resistance < 5)
@@ -56,6 +76,9 @@ def simulateShoots(historyShoot: List[Shoot]): List[Shoot] = {
   return simulateShoots(updatedHistoryShoots)
 }
 
+/*
+  This function will execute all the shoots per round of a competitor, and returns a structure that contains all.
+*/
 def simulateCompetitorRound(competitor: Competitor): CompetitorRound = {
   val initialShoot = simulateShoot(competitor)
   val shoots: List[Shoot] = simulateShoots(List(initialShoot))
@@ -65,6 +88,10 @@ def simulateCompetitorRound(competitor: Competitor): CompetitorRound = {
   )
 }
 
+/*
+  This is like the after - match time, we gonna see the best of the match, and give him the extra shoot, and later give to him the score for win the round!
+  Also, the competitors get tired and claims a new luck from the universe (just a joke, the luck comes from a pseudorandom generator).
+*/
 def updateCompetitorsStatisticsAfterRound(
     competitors: List[Competitor],
     historyRounds: List[Round]
@@ -83,6 +110,11 @@ def updateCompetitorsStatisticsAfterRound(
     .getTiredAndNewLuck(historyRounds)
 }
 
+/*
+  This function runs the rounds in the game, there are 2 ways to stop this, the firstone is that noone has enough resistance to continue,
+  and the secondone is that pass the round number 10.
+  This will return a list of rounds, that is essentially a Game!
+*/
 def simulateRounds(competitors: List[Competitor], historyRounds: List[Round], round: Int): List[Round] = {
   if (competitors.checkifSomeoneStillResistance() && round <= 10) {
     val shoots = competitors.map(competitor => simulateCompetitorRound(competitor))
@@ -98,7 +130,9 @@ def simulateRounds(competitors: List[Competitor], historyRounds: List[Round], ro
   }
   return historyRounds
 }
-
+/*
+  The root function, from here, all the 20000 game will be simulated
+*/
 def runSimulation(amountOfGames: Int): List[Game] = {
   val competitors = getAllCompetitors()
   0.until(amountOfGames)

@@ -2,6 +2,12 @@ package domain
 
 extension (rounds: List[Round]) {
 
+  /*
+    According to the point "If one shooter wins 9 points of experience, he losses only one point
+    of resistance in the next two rounds!"
+    This functions checks the history of rounds, to check if the competitor has achieve the 9 points in the last round!
+    if he did, we return a true and if he did'nt we return a false.
+  */
   def thisCompetitorGetTiredOne(competitor: Competitor): Boolean = {
     val element = List(2, 3)
     if (rounds.size < 3) return false

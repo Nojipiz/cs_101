@@ -6,6 +6,9 @@ import domain._
 import breeze.stats.distributions.Gaussian
 import breeze.stats.distributions.Rand.VariableSeed.randBasis
 
+/*
+  All of the Random() objects, generates a Pseudorandom secure number, it's not like "Math.random" in Java
+*/
 object PseudoRandomState {
 
   val gaussianDist = Gaussian(mu = COMPETITOR_RESISTANCE_MEAN, sigma = COMPETITOR_RESISTANCE_DESV)

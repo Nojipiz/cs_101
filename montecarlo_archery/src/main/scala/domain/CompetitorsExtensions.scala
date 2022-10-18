@@ -4,11 +4,18 @@ import domain._
 import simulator.PseudoRandomState
 
 extension (comp: List[Competitor]) {
+
   def checkifSomeoneStillResistance(): Boolean =
     comp
       .find(competitor => competitor.resistance >= SHOOT_RESISTANCE_COST)
       .isDefined
 
+  /*
+    According to the point "If one shooter wins 9 points of experience, he losses only one point
+    of resistance in the next two rounds!"
+    This function reduces the resistance of the shooters, but before checks if someone has win 9 points of experience
+    And set a new luck value!
+  */
   def getTiredAndNewLuck(
       historyRounds: List[Round]
   ): List[Competitor] =
@@ -21,6 +28,9 @@ extension (comp: List[Competitor]) {
       )
     })
 
+  /*
+    Obtains the luckiest player of each team, and returns a tuple with two competitors.
+  */
   def getLuckiestEachTeam(): (Competitor, Competitor) = {
     val bestTeamA = comp
       .filter(competitor => competitor.team == TeamName.TeamA)
@@ -31,8 +41,10 @@ extension (comp: List[Competitor]) {
     (bestTeamA, bestTeamB);
   }
 
-  /** At this point the list must have a even length, so it can be 2, 4, 6
-    */
+  /*
+    According to the point "If a player wins three extra shoots in a row, he can make another shoot without decrease the resistance amount"
+    So this function checks if this competitor has been the winner in the last 2 rounds (which means that this is the thirdone).
+  */
   def checkIfHasTwoLucksBefore(competitor: Competitor): Boolean = {
     if (comp.length <= 2)
       return false
