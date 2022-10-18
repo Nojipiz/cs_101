@@ -10,18 +10,26 @@ import scalafx.application.Platform
 class ViewModel {
 
   val simulationGlobalResults: ObjectProperty[GlobalResults] = ObjectProperty(GlobalResults(None, None))
+  val isLoading:ObjectProperty[Boolean] = ObjectProperty(false)
   var lastSimulation: List[Game] = List()
 
   def startSimulation(amount: Int): Unit = {
-    lastSimulation = runSimulation(amount)
-    val winnerTeam = lastSimulation.getWinnerTeam()
-    val winnerGender = lastSimulation.getWinnerGender()
-    simulationGlobalResults.set(
-      GlobalResults(
-        winnerTeam = Some(winnerTeam),
-        winnerGender = Some(winnerGender)
-      )
-    )
+    new Thread(){
+      override def run(): Unit = {
+        Platform.runLater{isLoading.set(true)}
+        lastSimulation = runSimulation(amount)
+        val winnerTeam = lastSimulation.getWinnerTeam()
+        val winnerGender = lastSimulation.getWinnerGender()
+        Platform.runLater{
+          simulationGlobalResults.set(
+            GlobalResults(
+            winnerTeam = Some(winnerTeam),
+            winnerGender = Some(winnerGender))
+          )
+          isLoading.set(false)
+        }
+      }
+    }.start()
   }
 
   def getLuckiestPlayerOfGame(game: String): String = {

@@ -14,6 +14,8 @@ import domain._
 import scalafx.stage.Stage
 import scalafx.event.ActionEvent
 import scalafx.collections.ObservableBuffer
+import scalafx.scene.image._
+import scalafx.beans.property.ReadOnlyDoubleProperty
 
 object StartView extends JFXApp3 {
 
@@ -40,12 +42,30 @@ object StartView extends JFXApp3 {
     }
   }
 
-  def GameAmountChooser() = new HBox {
+  def GameAmountChooser() = new VBox {
+    alignment = Pos.Center
+    val progressBar = new ProgressBar(){
+      visible = false
+    }
+    viewModel.isLoading.onChange { (_, _, isLoading: Boolean) =>
+        progressBar.setVisible(isLoading)
+    }
     children = Seq(
-      new Label("Cantidad de juegos = 20000"),
+      new Label("Cantidad de juegos (20000)") {
+        style = """
+          -fx-font-weight: bold
+        """
+      },
       new Button("Iniciar") {
         onAction = _ => viewModel.startSimulation(20000)
-      }
+        style = """  
+          -fx-background-color: #2684FF;
+          -fx-background-radius: 0;
+          -fx-background-insets: 0;
+          -fx-text-fill: white;
+        """
+      },
+      progressBar
     )
   }
 
@@ -53,30 +73,40 @@ object StartView extends JFXApp3 {
     val title = new Label("Equipo Ganador")
     val winnerTeamName = new Label("Ninguno")
     val winnerTeam = new Label("Sin Score")
+    val winnerTeamLogo = new ImageView("https://static.thenounproject.com/png/3482632-200.png"){
+      fitHeight = 50.0
+      fitWidth = 50.0
+    }
     viewModel.simulationGlobalResults.onChange { (_, _, results: GlobalResults) =>
       results.winnerTeam match {
         case Some(value) => {
           winnerTeamName.setText(value._1.toString())
           winnerTeam.setText(value._2.toString())
+          winnerTeamLogo.setImage(new Image(value._3))
         }
         case _ => print("No Team value")
       }
     }
-    children = Seq(title, winnerTeamName, winnerTeam)
+    children = Seq(title, winnerTeamName,winnerTeamLogo,  winnerTeam)
   }
 
   def WinnerGender() = new VBox {
     val title = new Label("Genero Ganador")
     val winnerGender = new Label("Ninguno")
+    val winnerGenderLogo = new ImageView("https://static.thenounproject.com/png/3482632-200.png"){
+      fitHeight = 50.0
+      fitWidth = 50.0
+    }
     viewModel.simulationGlobalResults.onChange { (_, _, results: GlobalResults) =>
       results.winnerGender match {
         case Some(value) => {
           winnerGender.setText(value.toString())
+          winnerGenderLogo.setImage(new Image(value.logoUrl))
         }
         case _ => print("No Team value")
       }
     }
-    children = Seq(title, winnerGender)
+    children = Seq(title, winnerGender, winnerGenderLogo)
   }
 
   def InformationCompetitorsPerGame() = new VBox {
@@ -152,6 +182,12 @@ object StartView extends JFXApp3 {
             viewModel.getCompetitorInformationOfGame(competitors(competitorIndex))
           initCompetitorInformationView(data)
         }
+        style = """  
+          -fx-background-color: #2684FF;
+          -fx-background-radius: 0;
+          -fx-background-insets: 0;
+          -fx-text-fill: white;
+        """
       }
     )
   }
