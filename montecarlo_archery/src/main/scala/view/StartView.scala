@@ -46,6 +46,10 @@ object StartView extends JFXApp3 {
     alignment = Pos.Center
     val progressBar = new ProgressBar(){
       visible = false
+      style = """
+        -fx-text-box-border: #2684FF;
+        -fx-control-inner-background: white;
+      """
     }
     viewModel.isLoading.onChange { (_, _, isLoading: Boolean) =>
         progressBar.setVisible(isLoading)
