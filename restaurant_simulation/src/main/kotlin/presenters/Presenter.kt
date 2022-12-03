@@ -1,5 +1,4 @@
 package presenters
-
 import models.*
 import views.MainWindow
 import java.awt.event.ActionEvent
@@ -7,7 +6,7 @@ import java.awt.event.ActionListener
 import java.io.IOException
 import javax.swing.Timer
 
-class Presenter : ActionListener {
+class Presenter{
     private var mainWindow: MainWindow? = null
     private lateinit var modelDao: Manager
     private val simulationClock: Time
@@ -17,7 +16,7 @@ class Presenter : ActionListener {
 
     init {
         try {
-            mainWindow = MainWindow(this)
+            mainWindow = MainWindow()
             modelDao = Manager()
         } catch (e: IOException) {
             e.printStackTrace()
@@ -25,7 +24,7 @@ class Presenter : ActionListener {
         mainWindow!!.isVisible = true
         simulationClock = Time(1, 1, 0, 0, 0)
         simulationLimit = Time(1, 2, 1, 1, 0)
-        runSimultaion()
+        //runSimultaion()
     }
 
     private fun runSimultaion() {
@@ -199,13 +198,6 @@ class Presenter : ActionListener {
             }
         }
         return waiter
-    }
-
-    override fun actionPerformed(e: ActionEvent) {
-        when (Event.valueOf(e.actionCommand)) {
-            Event.BOTON1 -> println("boton 1")
-            Event.BOTON2 -> println("boton 2")
-        }
     }
 
     // ======================== MUestreo de reportes ========================00
