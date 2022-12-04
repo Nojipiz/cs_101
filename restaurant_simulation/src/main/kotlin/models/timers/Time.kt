@@ -1,4 +1,4 @@
-package models
+package models.timers
 
 class Time {
     var hour: Int
@@ -40,21 +40,19 @@ class Time {
     }
 
     fun increaseWeek() {
-        week = week + 1
+        week += 1
     }
 
     fun beforeThan(time: Time?): Boolean {
-        return if (week < time!!.week || week == time.week && day < time.day || week == time.week && day == time.day && hour < time.hour || week == time.week && day == time.day && hour == time.hour && minute < time.minute || week == time.week && day == time.day && hour == time.hour && minute == time.minute && second < time.second) {
-            true
-        } else false
+        return week < time!!.week || week == time.week && day < time.day || week == time.week && day == time.day && hour < time.hour || week == time.week && day == time.day && hour == time.hour && minute < time.minute || week == time.week && day == time.day && hour == time.hour && minute == time.minute && second < time.second
     }
 
     fun addTime(time: Time?) {
-        second = second + time!!.second
-        minute = minute + time.minute
-        hour = hour + time.hour
-        day = day + time.day
-        week = week + time.week
+        second += time!!.second
+        minute += time.minute
+        hour += time.hour
+        day += time.day
+        week += time.week
         var aditionalTime: Int
         if (second >= 60) {
             aditionalTime = second - 60

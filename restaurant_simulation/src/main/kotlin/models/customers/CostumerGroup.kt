@@ -1,25 +1,26 @@
-package models
+package models.customers
 
+import models.timers.Time
 import utilities.Utilities
 
 class CostumerGroup(arrivalTime: Time?) {
-    val id: Long
-    val clientList: Array<Client?>
+    val customerGroupId: Long
+    val customerList: Array<Customer?>
     val arrivalTime: Time?
     var departureTime: Time?
 
     init {
-        id = idCounter++
+        customerGroupId = idCounter++
         val randomNumber = Utilities.randomNumber(1, 4)
         this.arrivalTime = arrivalTime
         departureTime = null
-        clientList = arrayOfNulls(randomNumber)
-        createClientList()
+        customerList = arrayOfNulls(randomNumber)
+        createCustomersList()
     }
 
-    private fun createClientList() {
-        for (i in clientList.indices) {
-            clientList[i] = Client()
+    private fun createCustomersList() {
+        for (i in customerList.indices) {
+            customerList[i] = Customer()
         }
     }
 

@@ -1,18 +1,29 @@
 package models
 
+import models.cashBox.Invoice
+import models.cashBox.PaymentType
+import models.customers.CostumerGroup
+import models.kitchen.Cook
+import models.kitchen.Order
+import models.kitchen.OrderItem
+import models.kitchen.SpecialtyType
+import models.kitchen.plates.DessertPlate
+import models.kitchen.plates.EntreePlate
+import models.kitchen.plates.MainCourse
+import models.kitchen.plates.Plate
+import models.rating.RatingType
+import models.rating.Rating
+import models.timers.Time
 import persistence.FileOperations
 import structures.QueuList
 
-//import persistence.FileManager;
 class Manager {
     private val class1List: ArrayList<ClaseLeturaEscritura>? = null
     private val dessertPlateList: ArrayList<DessertPlate>
-    private val mainPlateList: ArrayList<MainPlate>
+    private val mainCourseList: ArrayList<MainCourse>
     private val entreePlateList: ArrayList<EntreePlate>
-
     private val timeArrivalsClientList: ArrayList<Time>?
 
-    //	private ArrayList<CostumerGroup> CostumerGroupList;
     var groupQueue: QueuList<CostumerGroup?>
     var orderQueue: QueuList<Order?>
     var paymentQueue: QueuList<CostumerGroup>
@@ -24,7 +35,7 @@ class Manager {
     init {
         dessertPlateList = ArrayList()
         entreePlateList = ArrayList()
-        mainPlateList = ArrayList()
+        mainCourseList = ArrayList()
         groupQueue = QueuList(null)
         orderQueue = QueuList(null)
         paymentQueue = QueuList(null)
@@ -32,26 +43,26 @@ class Manager {
         invoiceList = ArrayList()
         waiterList = ArrayList()
         cookList = ArrayList()
-        //		costumerEatingList = new ArrayList<>();
         timeArrivalsClientList = FileOperations.readFile()
         startRestaurantMenu()
         createWaiterList()
         createCookList()
-        cretateGroupQueue()
+        createGroupQueue()
     }
 
     private fun createWaiterList() {
+
         for (i in 0 until WAITER_NUMBER) {
             waiterList.add(Waiter())
         }
     }
 
     private fun createCookList() {
-        cookList.add(Cook(SpecialtyType.POSTRE))
-        cookList.add(Cook(SpecialtyType.ENTRADA))
+        cookList.add(Cook(SpecialtyType.DESSERT))
+        cookList.add(Cook(SpecialtyType.ENTRY))
     }
 
-    private fun cretateGroupQueue() {
+    private fun createGroupQueue() {
         for (i in timeArrivalsClientList!!.indices) {
             groupQueue.push(CostumerGroup(timeArrivalsClientList[i]))
         }
@@ -60,8 +71,8 @@ class Manager {
     private fun startRestaurantMenu() {
         entreePlateList.add(EntreePlate("Causa de atún", Time(0, 7, 10), Time(0, 5, 0), 13.000))
         entreePlateList.add(EntreePlate("Chicharrón de calamar", Time(0, 4, 0), Time(0, 6, 0), 11.000))
-        mainPlateList.add(MainPlate("Aguadito norteño", Time(0, 27, 12), Time(0, 11, 23), 33.800))
-        mainPlateList.add(MainPlate("Chupe de langostinos", Time(0, 32, 0), Time(0, 15, 19), 35.200))
+        mainCourseList.add(MainCourse("Aguadito norteño", Time(0, 27, 12), Time(0, 11, 23), 33.800))
+        mainCourseList.add(MainCourse("Chupe de langostinos", Time(0, 32, 0), Time(0, 15, 19), 35.200))
         dessertPlateList.add(DessertPlate("Chocotejas", Time(0, 8, 7), Time(0, 11, 34), 5.000))
         dessertPlateList.add(DessertPlate("Arroz con leche", Time(0, 7, 12), Time(0, 13, 19), 3.600))
     }
@@ -71,54 +82,59 @@ class Manager {
     }
 
     fun addOrderQueue(costumerGroup: CostumerGroup) {
-        val idGroup = costumerGroup.id
-        val clientList = costumerGroup.clientList
+        val groupId = costumerGroup.customerGroupId
+        val clientList = costumerGroup.customerList
         val order = Order()
         var item: OrderItem? = null
         var code: Int
-        var quialificationList: ArrayList<Quialification>
-        for (i in clientList!!.indices) {
-            if (clientList!![i] != null) {
-                quialificationList = clientList[i]?.qualificationList ?: continue
-                for (j in quialificationList!!.indices) {
-                    code = quialificationList[j]!!.getcode()
-                    if (code != -1) {
-                        item = returnItem(item, code, quialificationList, j, idGroup)
-                        order.addItem(item)
-                    }
+        var ratingList: ArrayList<Rating>
+        clientList.filterNotNull().forEach { myClient ->
+            ratingList = myClient.ratingList
+            ratingList.forEachIndexed { index, qualification ->
+                code = qualification.getcode()
+                if (code != -1) {
+                    item = getItem(item, code, ratingList, index, groupId)
+                    order.addItem(item)
                 }
             }
         }
         orderQueue.push(order)
     }
 
-    private fun returnItem(item: OrderItem?, code: Int, quialificationList: ArrayList<Quialification>, index: Int, idGroup: Long): OrderItem? {
+    private fun getItem(
+        item: OrderItem?,
+        code: Int,
+        ratingList: ArrayList<Rating>,
+        index: Int,
+        idGroup: Long
+    ): OrderItem? {
         var item = item
         var plate: Plate
-        //		System.out.println("code..."+code);
-        if (quialificationList!![index].type == QualificationType.ENTRADA) {
-            plate = entreePlateList[code]
-            item = OrderItem(plate, SpecialtyType.ENTRADA, idGroup)
-        }
-        if (quialificationList[index].type == QualificationType.FUERTE) {
-            plate = mainPlateList[code]
-            item = OrderItem(plate, SpecialtyType.FUERTE, idGroup)
-        }
-        if (quialificationList[index].type == QualificationType.POSTRE) {
-            plate = dessertPlateList[code]
-            item = OrderItem(plate, SpecialtyType.POSTRE, idGroup)
+        when (ratingList!![index].type) {
+            RatingType.ENTRY -> {
+                plate = entreePlateList[code]
+                item = OrderItem(plate, SpecialtyType.ENTRY, idGroup)
+            }
+            RatingType.MAIN_COURSE -> {
+                plate = mainCourseList[code]
+                item = OrderItem(plate, SpecialtyType.MAIN_COURSE, idGroup)
+            }
+            RatingType.DESSERT -> {
+                plate = dessertPlateList[code]
+                item = OrderItem(plate, SpecialtyType.DESSERT, idGroup)
+            }
         }
         return item
     }
 
     fun cookPlate(cook: Cook, orderItem: OrderItem?, currentTime: Time?) {
-        cookList[cook.id.toInt()].cookPlate(orderItem, currentTime)
+        cookList[cook.cookId.toInt()].cookPlate(orderItem, currentTime)
     }
 
     fun setDepartureTimeGroup(currentTime: Time, orderItem: OrderItem) {
         currentTime.addTime(orderItem.plate.consumptionTime)
         for (i in invoiceList.indices) {
-            if (invoiceList[i].costumerGroup?.id == orderItem.idGroup) {
+            if (invoiceList[i].costumerGroup?.customerGroupId == orderItem.idGroup) {
                 invoiceList[i].costumerGroup?.departureTime = currentTime
             }
         }
@@ -158,15 +174,15 @@ class Manager {
             var countPaymentTypeEfecty = 0
             for (actualInvoice in invoiceList) {
                 val paymentType = actualInvoice.paymentType
-                if (paymentType == PaymentType.TARJETA) {
+                if (paymentType == PaymentType.CREDIT_CARD) {
                     countPaymentTypeCard++
                 } else {
                     countPaymentTypeEfecty++
                 }
             }
             val paymentsList = HashMap<PaymentType, Int>()
-            paymentsList[PaymentType.EFECTIVO] = countPaymentTypeEfecty
-            paymentsList[PaymentType.TARJETA] = countPaymentTypeCard
+            paymentsList[PaymentType.CASH] = countPaymentTypeEfecty
+            paymentsList[PaymentType.CREDIT_CARD] = countPaymentTypeCard
             return paymentsList
         }
 
@@ -181,20 +197,20 @@ class Manager {
             var countDessertPlate = 0
             for (actualInvoice in invoiceList) {
                 val costumerGroup = actualInvoice.costumerGroup
-                val clientsList = costumerGroup?.clientList
+                val clientsList = costumerGroup?.customerList
                 for (actualClient in clientsList!!) {
-                    val qualificationList = actualClient?.qualificationList
+                    val qualificationList = actualClient?.ratingList
                     for (actualQuialification in qualificationList!!) {
                         val code = actualQuialification!!.getcode()
                         val qualificationType = actualQuialification.type
                         if (code != -1) {
-                            if (qualificationType == QualificationType.ENTRADA) {
+                            if (qualificationType == RatingType.ENTRY) {
                                 val entreePlate = entreePlateList[code]
                                 countEntreePlate += entreePlate.cost.toInt()
-                            } else if (qualificationType == QualificationType.FUERTE) {
-                                val mainPlate = mainPlateList[code]
+                            } else if (qualificationType == RatingType.MAIN_COURSE) {
+                                val mainPlate = mainCourseList[code]
                                 countMainPlate += mainPlate.cost.toInt()
-                            } else if (qualificationType == QualificationType.POSTRE) {
+                            } else if (qualificationType == RatingType.DESSERT) {
                                 val dessertPlate = dessertPlateList[code]
                                 countDessertPlate += dessertPlate.cost.toInt()
                             }
@@ -215,7 +231,7 @@ class Manager {
             val countWaiterList = IntArray(waiterList.size)
             for (i in invoiceList.indices) {
                 val actualInvoice = invoiceList[i]
-                val quialification = actualInvoice.waiterQuialification
+                val quialification = actualInvoice.waiterRating
                 if (quialification != null) {
                     val score = quialification.score
                     val code = quialification.getcode()
@@ -238,27 +254,27 @@ class Manager {
         get() {
             val countScoreEntreePlateList = IntArray(entreePlateList.size)
             val countEntreePlateList = IntArray(entreePlateList.size)
-            val countScoreMainPlateList = IntArray(mainPlateList.size)
-            val countMainPlateList = IntArray(mainPlateList.size)
+            val countScoreMainPlateList = IntArray(mainCourseList.size)
+            val countMainPlateList = IntArray(mainCourseList.size)
             val countScoreDessertPlateList = IntArray(dessertPlateList.size)
             val countDessertPlateList = IntArray(dessertPlateList.size)
             for (actualInvoice in invoiceList) {
                 val costumerGroup = actualInvoice.costumerGroup
-                val clientsList = costumerGroup?.clientList
+                val clientsList = costumerGroup?.customerList
                 for (actualClient in clientsList!!) {
-                    val qualificationList = actualClient?.qualificationList
+                    val qualificationList = actualClient?.ratingList
                     for (actualQuialification in qualificationList!!) {
                         val code = actualQuialification!!.getcode()
                         val score = actualQuialification.score
                         val qualificationType = actualQuialification.type
                         if (code != -1) {
-                            if (qualificationType == QualificationType.ENTRADA) {
+                            if (qualificationType == RatingType.ENTRY) {
                                 countScoreEntreePlateList[code] += score
                                 countEntreePlateList[code]++
-                            } else if (qualificationType == QualificationType.FUERTE) {
+                            } else if (qualificationType == RatingType.MAIN_COURSE) {
                                 countScoreMainPlateList[code] += score
                                 countMainPlateList[code]++
-                            } else if (qualificationType == QualificationType.POSTRE) {
+                            } else if (qualificationType == RatingType.DESSERT) {
                                 countScoreDessertPlateList[code] += score
                                 countDessertPlateList[code]++
                             }
@@ -273,7 +289,7 @@ class Manager {
             val coordenateMainPlate = getBestCoordenate(averageMainPlate)
             val coordenateDessertPlate = getBestCoordenate(averageDessertPlate)
             val entreePlate = entreePlateList[coordenateEntreePlate]
-            val mainPlate = mainPlateList[coordenateMainPlate]
+            val mainPlate = mainCourseList[coordenateMainPlate]
             val dessertPlate = dessertPlateList[coordenateDessertPlate]
             return arrayOf(entreePlate, mainPlate, dessertPlate)
         }
@@ -281,22 +297,22 @@ class Manager {
     val entreePlateMainPlateAndDessertBestSeller: Array<Plate>
         get() {
             val countEntreePlateList = IntArray(entreePlateList.size)
-            val countMainPlateList = IntArray(mainPlateList.size)
+            val countMainPlateList = IntArray(mainCourseList.size)
             val countDessertPlateList = IntArray(dessertPlateList.size)
             for (actualInvoice in invoiceList) {
                 val costumerGroup = actualInvoice.costumerGroup
-                val clientsList = costumerGroup?.clientList
+                val clientsList = costumerGroup?.customerList
                 for (actualClient in clientsList!!) {
-                    val qualificationList = actualClient?.qualificationList
+                    val qualificationList = actualClient?.ratingList
                     for (actualQuialification in qualificationList!!) {
                         val code = actualQuialification!!.getcode()
                         val qualificationType = actualQuialification.type
                         if (code != -1) {
-                            if (qualificationType == QualificationType.ENTRADA) {
+                            if (qualificationType == RatingType.ENTRY) {
                                 countEntreePlateList[code]++
-                            } else if (qualificationType == QualificationType.FUERTE) {
+                            } else if (qualificationType == RatingType.MAIN_COURSE) {
                                 countMainPlateList[code]++
-                            } else if (qualificationType == QualificationType.POSTRE) {
+                            } else if (qualificationType == RatingType.DESSERT) {
                                 countDessertPlateList[code]++
                             }
                         }
@@ -307,7 +323,7 @@ class Manager {
             val coordenateMainPlate = getBestCoordenate(countMainPlateList)
             val coordenateDessertPlate = getBestCoordenate(countDessertPlateList)
             val entreePlate = entreePlateList[coordenateEntreePlate]
-            val mainPlate = mainPlateList[coordenateMainPlate]
+            val mainPlate = mainCourseList[coordenateMainPlate]
             val dessertPlate = dessertPlateList[coordenateDessertPlate]
             return arrayOf(entreePlate, mainPlate, dessertPlate)
         }

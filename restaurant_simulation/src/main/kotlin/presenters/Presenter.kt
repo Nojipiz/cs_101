@@ -1,5 +1,11 @@
 package presenters
 import models.*
+import models.cashBox.Invoice
+import models.cashBox.PaymentType
+import models.customers.CostumerGroup
+import models.kitchen.Cook
+import models.kitchen.SpecialtyType
+import models.timers.Time
 import views.MainWindow
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
@@ -110,10 +116,10 @@ class Presenter{
             if (costumerGroup?.departureTime != null) {
                 if (!simulationClock.beforeThan(costumerGroup.departureTime)) {
                     println("  un grupo esta en pasarela de pagos " + costumerGroup.departureTime)
-                    if (invoList!![i].paymentType == PaymentType.EFECTIVO) {
+                    if (invoList!![i].paymentType == PaymentType.CASH) {
                         modelDao!!.pushPaymentPriorityQueue(costumerGroup)
                     }
-                    if (invoList!![i].paymentType == PaymentType.TARJETA) {
+                    if (invoList!![i].paymentType == PaymentType.CREDIT_CARD) {
                         modelDao!!.pushPaymentQueue(costumerGroup)
                     }
                 }
@@ -140,11 +146,11 @@ class Presenter{
             val order = modelDao.orderQueue.peek()
             val orderItem = order?.orderItemQueue?.peek()
             val cookList = modelDao.cookList
-            println("relog :$simulationClock")
+            println("reloj :$simulationClock")
             val cook = findAvailableCook(cookList, orderItem?.plateType)
             if (cook == null) println("ningun cocinero disponible")
             if (cook != null) {
-                println("cocinero disponible " + cook.id)
+                println("cocinero disponible " + cook.cookId)
                 println("(antes) cocinero 0 disponible hasta " + cookList!![0].nextFreeTime)
                 println("(antes) cocinero 1 disponible hasta " + cookList!![1].nextFreeTime)
                 modelDao!!.cookPlate(cook, orderItem, simulationClock)
@@ -170,7 +176,7 @@ class Presenter{
             orderItemList[i]?.let {
                 modelDao!!.setDepartureTimeGroup(simulationClock, it)
                 modelDao!!.setDepartureTimeGroup(simulationClock, it)
-                println("  El cocinero " + cook.id + " ha finalizado la preparacion de " + it.plate.name +
+                println("  El cocinero " + cook.cookId + " ha finalizado la preparacion de " + it.plate.name +
                         " para el grupo " + it.idGroup + " " + simulationClock.toString())
             }
         }
@@ -179,10 +185,10 @@ class Presenter{
     private fun findAvailableCook(cookList: ArrayList<Cook>?, plateType: SpecialtyType?): Cook? {
         var cook: Cook? = null
         for (i in cookList!!.indices) {
-            if (cookList[i]!!.isAvaliable(plateType, simulationClock)) {
+            if (cookList[i]!!.isAvailable(plateType, simulationClock)) {
                 cook = cookList[i]
                 println("especilidades: plato-" + plateType + "  mesero-" + cook.specialy)
-                println("encontramos disponible a cocinero " + cook.id)
+                println("encontramos disponible a cocinero " + cook.cookId)
                 return cook
             }
         }
@@ -192,9 +198,9 @@ class Presenter{
     private fun findAvailableWaiter(): Waiter? {
         val waiterList = modelDao.waiterList
         var waiter: Waiter? = null
-        for (i in waiterList!!.indices) {
-            if (waiterList!![i]!!.isAvaliable) {
-                waiter = waiterList!![i]
+        for (i in waiterList.filterNotNull().indices) {
+            if (waiterList[i].isAvaliable) {
+                waiter = waiterList[i]
             }
         }
         return waiter

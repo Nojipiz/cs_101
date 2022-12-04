@@ -1,6 +1,6 @@
 package test
 
-import models.Time
+import models.timers.Time
 
 object Test {
     @JvmStatic
