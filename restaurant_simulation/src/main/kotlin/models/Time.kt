@@ -40,7 +40,7 @@ class Time {
     }
 
     fun increaseWeek() {
-        week = week + 1
+        week += 1
     }
 
     fun beforeThan(time: Time?): Boolean {
@@ -48,11 +48,11 @@ class Time {
     }
 
     fun addTime(time: Time?) {
-        second = second + time!!.second
-        minute = minute + time.minute
-        hour = hour + time.hour
-        day = day + time.day
-        week = week + time.week
+        second += time!!.second
+        minute += time.minute
+        hour += time.hour
+        day += time.day
+        week += time.week
         var aditionalTime: Int
         if (second >= 60) {
             aditionalTime = second - 60

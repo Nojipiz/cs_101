@@ -1,4 +1,7 @@
-package models
+package models.kitchen
+
+import models.SpecialtyType
+import models.kitchen.plates.Plate
 
 class OrderItem(plate: Plate, plateType: SpecialtyType, val idGroup: Long) {
     private val id: Long

@@ -1,8 +1,11 @@
-package models
+package models.kitchen
+
+import models.SpecialtyType
+import models.Time
 
 class Cook(specialy: SpecialtyType) {
-    val id: Long
-    private var avaliable: Boolean
+    val cookId: Long = idCounter++
+    private var isAvailable: Boolean
     val specialy: SpecialtyType
     private var assignedSpeciality: Int
     var nextFreeTime: Time?
@@ -10,30 +13,29 @@ class Cook(specialy: SpecialtyType) {
     val orderItemList: Array<OrderItem?>
 
     init {
-        id = idCounter++
         this.specialy = specialy
-        avaliable = true
+        isAvailable = true
         assignedSpeciality = 0
         nextFreeTime = Time(1, 1, 0, 0, 0)
         orderItemList = arrayOfNulls(SPECIAL_PLATE_LIMIT)
     }
 
-    fun isAvaliable(specialtyType: SpecialtyType?, currentTime: Time?): Boolean {
+    fun isAvailable(specialtyType: SpecialtyType?, currentTime: Time?): Boolean {
         if (specialy == specialtyType && assignedSpeciality < SPECIAL_PLATE_LIMIT) {
-            avaliable = true
+            isAvailable = true
         } else if (nextFreeTime!!.beforeThan(currentTime)) {
             resetOrderItemList()
             assignedSpeciality = 0
-            avaliable = true
+            isAvailable = true
         }
-        return avaliable
+        return isAvailable
     }
 
     fun cookPlate(orderItem: OrderItem?, currentSimulation: Time?) {
         addOrderItem(orderItem)
         nextFreeTime = orderItem?.plate?.preparationTime
         nextFreeTime!!.addTime(currentSimulation)
-        avaliable = false
+        isAvailable = false
         if (specialy == orderItem?.plateType) {
             assignedSpeciality++
         }

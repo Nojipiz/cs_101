@@ -1,5 +1,8 @@
 package models
 
 enum class QualificationType {
-    ENTRADA, FUERTE, POSTRE, MESERO
+    ENTRY,
+    MAIN_COURSE,
+    DESSERT,
+    WAITER
 }

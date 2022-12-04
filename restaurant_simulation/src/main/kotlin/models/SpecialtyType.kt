@@ -1,5 +1,5 @@
 package models
 
 enum class SpecialtyType {
-    ENTRADA, FUERTE, POSTRE
+    ENTRY, MAIN_COURSE, DESSERT
 }

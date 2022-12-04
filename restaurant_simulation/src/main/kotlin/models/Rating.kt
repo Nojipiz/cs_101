@@ -1,13 +1,13 @@
 package models
 
-class Quialification(type: QualificationType, reference: Int, score: Int) {
-    private val id: Long
+class Rating(type: QualificationType, reference: Int, score: Int) {
+    private val ratingId: Long
     val type: QualificationType
     private val code: Int
     val score: Int
 
     init {
-        id = idCounter++
+        ratingId = idCounter++
         this.type = type
         this.code = reference
         this.score = score
