@@ -40,9 +40,11 @@ export default function DropZone() {
         <CardImage size={120} />
         <input {...getInputProps()} />
         {isDragActive ? (
-          <p>Suelta la imagen aqui</p>
+          <p className={styles.text}>Suelta la imagen aqui</p>
         ) : (
-          <p>Agarra y suelta la imagen que desees clasificar</p>
+          <p className={styles.text}>
+            Agarra y suelta la imagen que desees clasificar
+          </p>
         )}
       </div>
     </div>
