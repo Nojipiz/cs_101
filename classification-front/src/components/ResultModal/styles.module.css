@@ -1,0 +1,33 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.close_button {
+  font-size: 2rem;
+  border-radius: 2rem;
+  border: none;
+  background-color: #2d728f;
+  color: white;
+  padding: 0.5rem 2rem;
+  margin: 0.8rem;
+}
+
+.image {
+  width: 30vw;
+}
+
+.result_data {
+  margin: 0;
+}
+
+.result {
+  margin: 0;
+  padding: 0;
+}
+
+.fiability {
+  margin: 0;
+}
