@@ -1,6 +1,6 @@
-package models
+package models.rating
 
-enum class QualificationType {
+enum class RatingType {
     ENTRY,
     MAIN_COURSE,
     DESSERT,

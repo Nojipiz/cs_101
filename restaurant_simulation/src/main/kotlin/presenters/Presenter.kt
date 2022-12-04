@@ -5,6 +5,8 @@ import models.cashBox.Invoice
 import models.cashBox.PaymentType
 import models.customers.CostumerGroup
 import models.kitchen.Cook
+import models.kitchen.SpecialtyType
+import models.timers.Time
 import views.MainWindow
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener

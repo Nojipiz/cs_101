@@ -1,6 +1,6 @@
 package models.customers
 
-import models.Time
+import models.timers.Time
 import utilities.Utilities
 
 class CostumerGroup(arrivalTime: Time?) {

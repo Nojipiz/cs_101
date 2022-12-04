@@ -1,6 +1,6 @@
 package persistence
 
-import models.Time
+import models.timers.Time
 import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Paths

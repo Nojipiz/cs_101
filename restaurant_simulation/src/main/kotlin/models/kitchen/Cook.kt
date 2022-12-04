@@ -1,7 +1,6 @@
 package models.kitchen
 
-import models.SpecialtyType
-import models.Time
+import models.timers.Time
 
 class Cook(specialy: SpecialtyType) {
     val cookId: Long = idCounter++

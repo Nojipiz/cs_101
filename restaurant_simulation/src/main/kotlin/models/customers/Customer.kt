@@ -1,7 +1,7 @@
 package models.customers
 
-import models.Rating
-import models.QualificationType
+import models.rating.Rating
+import models.rating.RatingType
 import utilities.Utilities
 
 class Customer {
@@ -17,22 +17,22 @@ class Customer {
     private fun creatQualificationList() {
         ratingList.add(
             Rating(
-                QualificationType.MAIN_COURSE, Utilities.randomNumber(0, QUANTITY_OF_MAIN_PLATE - 1),  //				QualificationType.FUERTE, 0,
+                RatingType.MAIN_COURSE, Utilities.randomNumber(0, QUANTITY_OF_MAIN_PLATE - 1),  //				RatingType.FUERTE, 0,
                 Utilities.randomNumber(MINIUM_QUALIFICATION, MAXIUM_QUALIFICATION))
         )
         ratingList.add(
             Rating(
-                QualificationType.ENTRY, Utilities.randomNumber(-1, QUANTITY_OF_ENTREE_PLATE - 1),
+                RatingType.ENTRY, Utilities.randomNumber(-1, QUANTITY_OF_ENTREE_PLATE - 1),
                 Utilities.randomNumber(MINIUM_QUALIFICATION, MAXIUM_QUALIFICATION))
         )
         ratingList.add(
             Rating(
-                QualificationType.DESSERT, Utilities.randomNumber(-1, QUANTITY_OF_DESSERT_PLATE - 1),
+                RatingType.DESSERT, Utilities.randomNumber(-1, QUANTITY_OF_DESSERT_PLATE - 1),
                 Utilities.randomNumber(MINIUM_QUALIFICATION, MAXIUM_QUALIFICATION))
         )
         ratingList.add(
             Rating(
-                QualificationType.DESSERT, Utilities.randomNumber(-1, QUANTITY_OF_DESSERT_PLATE - 1),
+                RatingType.DESSERT, Utilities.randomNumber(-1, QUANTITY_OF_DESSERT_PLATE - 1),
                 Utilities.randomNumber(MINIUM_QUALIFICATION, MAXIUM_QUALIFICATION))
         )
     }

@@ -1,7 +1,8 @@
 package models.cashBox
 
-import models.*
 import models.customers.CostumerGroup
+import models.rating.Rating
+import models.timers.Time
 import utilities.Utilities
 
 class Invoice(time: Time, costumerGroup: CostumerGroup?, waiterRating: Rating?) {

@@ -1,7 +1,6 @@
 package models
 
 class Waiter {
-    // TODO Auto-generated method stub
     val id: Long
     private var assignedTables: Int
     var isAvaliable: Boolean

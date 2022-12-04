@@ -1,6 +1,6 @@
 package models.kitchen.plates
 
-import models.Time
+import models.timers.Time
 
 open class Plate(name: String, consumptionTime: Time, preparationTime: Time, cost: Double) {
     open val id: Long

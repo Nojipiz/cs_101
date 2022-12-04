@@ -1,4 +1,4 @@
-package models
+package models.timers
 
 class Time {
     var hour: Int

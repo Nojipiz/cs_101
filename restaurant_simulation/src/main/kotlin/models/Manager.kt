@@ -6,10 +6,14 @@ import models.customers.CostumerGroup
 import models.kitchen.Cook
 import models.kitchen.Order
 import models.kitchen.OrderItem
+import models.kitchen.SpecialtyType
 import models.kitchen.plates.DessertPlate
 import models.kitchen.plates.EntreePlate
 import models.kitchen.plates.MainCourse
 import models.kitchen.plates.Plate
+import models.rating.RatingType
+import models.rating.Rating
+import models.timers.Time
 import persistence.FileOperations
 import structures.QueuList
 
@@ -107,15 +111,15 @@ class Manager {
         var item = item
         var plate: Plate
         when (ratingList!![index].type) {
-            QualificationType.ENTRY -> {
+            RatingType.ENTRY -> {
                 plate = entreePlateList[code]
                 item = OrderItem(plate, SpecialtyType.ENTRY, idGroup)
             }
-            QualificationType.MAIN_COURSE -> {
+            RatingType.MAIN_COURSE -> {
                 plate = mainCourseList[code]
                 item = OrderItem(plate, SpecialtyType.MAIN_COURSE, idGroup)
             }
-            QualificationType.DESSERT -> {
+            RatingType.DESSERT -> {
                 plate = dessertPlateList[code]
                 item = OrderItem(plate, SpecialtyType.DESSERT, idGroup)
             }
@@ -200,13 +204,13 @@ class Manager {
                         val code = actualQuialification!!.getcode()
                         val qualificationType = actualQuialification.type
                         if (code != -1) {
-                            if (qualificationType == QualificationType.ENTRY) {
+                            if (qualificationType == RatingType.ENTRY) {
                                 val entreePlate = entreePlateList[code]
                                 countEntreePlate += entreePlate.cost.toInt()
-                            } else if (qualificationType == QualificationType.MAIN_COURSE) {
+                            } else if (qualificationType == RatingType.MAIN_COURSE) {
                                 val mainPlate = mainCourseList[code]
                                 countMainPlate += mainPlate.cost.toInt()
-                            } else if (qualificationType == QualificationType.DESSERT) {
+                            } else if (qualificationType == RatingType.DESSERT) {
                                 val dessertPlate = dessertPlateList[code]
                                 countDessertPlate += dessertPlate.cost.toInt()
                             }
@@ -264,13 +268,13 @@ class Manager {
                         val score = actualQuialification.score
                         val qualificationType = actualQuialification.type
                         if (code != -1) {
-                            if (qualificationType == QualificationType.ENTRY) {
+                            if (qualificationType == RatingType.ENTRY) {
                                 countScoreEntreePlateList[code] += score
                                 countEntreePlateList[code]++
-                            } else if (qualificationType == QualificationType.MAIN_COURSE) {
+                            } else if (qualificationType == RatingType.MAIN_COURSE) {
                                 countScoreMainPlateList[code] += score
                                 countMainPlateList[code]++
-                            } else if (qualificationType == QualificationType.DESSERT) {
+                            } else if (qualificationType == RatingType.DESSERT) {
                                 countScoreDessertPlateList[code] += score
                                 countDessertPlateList[code]++
                             }
@@ -304,11 +308,11 @@ class Manager {
                         val code = actualQuialification!!.getcode()
                         val qualificationType = actualQuialification.type
                         if (code != -1) {
-                            if (qualificationType == QualificationType.ENTRY) {
+                            if (qualificationType == RatingType.ENTRY) {
                                 countEntreePlateList[code]++
-                            } else if (qualificationType == QualificationType.MAIN_COURSE) {
+                            } else if (qualificationType == RatingType.MAIN_COURSE) {
                                 countMainPlateList[code]++
-                            } else if (qualificationType == QualificationType.DESSERT) {
+                            } else if (qualificationType == RatingType.DESSERT) {
                                 countDessertPlateList[code]++
                             }
                         }

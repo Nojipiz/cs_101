@@ -1,8 +1,8 @@
-package models
+package models.rating
 
-class Rating(type: QualificationType, reference: Int, score: Int) {
+class Rating(type: RatingType, reference: Int, score: Int) {
     private val ratingId: Long
-    val type: QualificationType
+    val type: RatingType
     private val code: Int
     val score: Int
 
