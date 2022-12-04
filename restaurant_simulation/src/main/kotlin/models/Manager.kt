@@ -3,16 +3,13 @@ package models
 import persistence.FileOperations
 import structures.QueuList
 
-//import persistence.FileManager;
 class Manager {
     private val class1List: ArrayList<ClaseLeturaEscritura>? = null
     private val dessertPlateList: ArrayList<DessertPlate>
     private val mainPlateList: ArrayList<MainPlate>
     private val entreePlateList: ArrayList<EntreePlate>
-
     private val timeArrivalsClientList: ArrayList<Time>?
 
-    //	private ArrayList<CostumerGroup> CostumerGroupList;
     var groupQueue: QueuList<CostumerGroup?>
     var orderQueue: QueuList<Order?>
     var paymentQueue: QueuList<CostumerGroup>
@@ -32,12 +29,11 @@ class Manager {
         invoiceList = ArrayList()
         waiterList = ArrayList()
         cookList = ArrayList()
-        //		costumerEatingList = new ArrayList<>();
         timeArrivalsClientList = FileOperations.readFile()
         startRestaurantMenu()
         createWaiterList()
         createCookList()
-        cretateGroupQueue()
+        createGroupQueue()
     }
 
     private fun createWaiterList() {
@@ -51,7 +47,7 @@ class Manager {
         cookList.add(Cook(SpecialtyType.ENTRADA))
     }
 
-    private fun cretateGroupQueue() {
+    private fun createGroupQueue() {
         for (i in timeArrivalsClientList!!.indices) {
             groupQueue.push(CostumerGroup(timeArrivalsClientList[i]))
         }
@@ -71,28 +67,32 @@ class Manager {
     }
 
     fun addOrderQueue(costumerGroup: CostumerGroup) {
-        val idGroup = costumerGroup.id
+        val groupId = costumerGroup.id
         val clientList = costumerGroup.clientList
         val order = Order()
         var item: OrderItem? = null
         var code: Int
-        var quialificationList: ArrayList<Quialification>
-        for (i in clientList!!.indices) {
-            if (clientList!![i] != null) {
-                quialificationList = clientList[i]?.qualificationList ?: continue
-                for (j in quialificationList!!.indices) {
-                    code = quialificationList[j]!!.getcode()
-                    if (code != -1) {
-                        item = returnItem(item, code, quialificationList, j, idGroup)
-                        order.addItem(item)
-                    }
+        var qualificationList: ArrayList<Quialification>
+        clientList.filterNotNull().forEach { myClient ->
+            qualificationList = myClient.qualificationList
+            qualificationList.forEachIndexed { index, quialification ->
+                code = quialification.getcode()
+                if (code != -1) {
+                    item = returnItem(item, code, qualificationList, index, groupId)
+                    order.addItem(item)
                 }
             }
         }
         orderQueue.push(order)
     }
 
-    private fun returnItem(item: OrderItem?, code: Int, quialificationList: ArrayList<Quialification>, index: Int, idGroup: Long): OrderItem? {
+    private fun returnItem(
+        item: OrderItem?,
+        code: Int,
+        quialificationList: ArrayList<Quialification>,
+        index: Int,
+        idGroup: Long
+    ): OrderItem? {
         var item = item
         var plate: Plate
         //		System.out.println("code..."+code);

@@ -44,9 +44,7 @@ class Time {
     }
 
     fun beforeThan(time: Time?): Boolean {
-        return if (week < time!!.week || week == time.week && day < time.day || week == time.week && day == time.day && hour < time.hour || week == time.week && day == time.day && hour == time.hour && minute < time.minute || week == time.week && day == time.day && hour == time.hour && minute == time.minute && second < time.second) {
-            true
-        } else false
+        return week < time!!.week || week == time.week && day < time.day || week == time.week && day == time.day && hour < time.hour || week == time.week && day == time.day && hour == time.hour && minute < time.minute || week == time.week && day == time.day && hour == time.hour && minute == time.minute && second < time.second
     }
 
     fun addTime(time: Time?) {
