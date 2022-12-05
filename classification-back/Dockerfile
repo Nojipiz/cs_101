@@ -10,4 +10,4 @@ COPY . .
 RUN apt-get update
 RUN apt-get install ffmpeg libsm6 libxext6  -y
 
-CMD [ "python3", "-m", "flask", "--app","main",  "run", "--host=0.0.0.0", "-p $PORT"]
+CMD [ "python3", "main.py"]
