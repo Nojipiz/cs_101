@@ -7,7 +7,7 @@ app = Flask(__name__)
 CORS(app)
 
 @app.route("/classify", methods=['POST'])
-def hello_world():
+def classify_image():
     request_data = request.json
     if(request_data == None):
         return '{"message": "Invalid Request"}'
