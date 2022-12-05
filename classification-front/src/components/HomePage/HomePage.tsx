@@ -2,6 +2,7 @@ import styles from './styles.module.css';
 import DropZone from '../DropZone/DropZone';
 import { createContext, useState } from 'react';
 import ResultModal from '../ResultModal/ResultModal';
+import { ArrowRepeat } from 'react-bootstrap-icons';
 
 interface HomeContextModel {
   isLoading: boolean;
@@ -45,7 +46,7 @@ export default function HomePage() {
       }}
     >
       <Header />
-      <DropZone />
+      {isLoading ? <LoadingComponent /> : <DropZone />}
       <ResultModal />
     </HomeContext.Provider>
   );
@@ -61,5 +62,13 @@ function Header() {
         Andrey Suarez Bonilla
       </p>
     </header>
+  );
+}
+
+function LoadingComponent() {
+  return (
+    <div className={styles.loading_wrapper}>
+      <ArrowRepeat className={styles.loading_component} />;
+    </div>
   );
 }
