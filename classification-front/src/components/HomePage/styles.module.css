@@ -1,3 +1,24 @@
-.header{
+.loading_wrapper {
+  display: flex;
+  width: 100%;
+  height: 90vh;
+  justify-content: center;
+  align-items: center;
 }
 
+.loading_component {
+  border-left-color: transparent;
+  animation: spin 1s linear infinite;
+  width: 400px;
+  height: 200px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

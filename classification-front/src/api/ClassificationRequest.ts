@@ -28,14 +28,17 @@ export async function convertToBase64(file: File): Promise<string | undefined> {
 }
 
 async function postImageToClassificate(base64Image: string): Promise<number> {
-  const response = await fetch('http://127.0.0.1:5000/classify', {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ image_src: base64Image })
-  });
+  const response = await fetch(
+    'https://flask-production-aafb.up.railway.app/classify',
+    {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ image_src: base64Image })
+    }
+  );
   const classifyJson = await response.json();
   return classifyJson.result as number;
 }
