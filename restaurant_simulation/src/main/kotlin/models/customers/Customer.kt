@@ -2,7 +2,7 @@ package models.customers
 
 import models.rating.Rating
 import models.rating.RatingType
-import utilities.Utilities
+import utilities.Generator
 
 class Customer {
     private val customerId: Long
@@ -17,23 +17,23 @@ class Customer {
     private fun creatQualificationList() {
         ratingList.add(
             Rating(
-                RatingType.MAIN_COURSE, Utilities.randomNumber(0, QUANTITY_OF_MAIN_PLATE - 1),  //				RatingType.FUERTE, 0,
-                Utilities.randomNumber(MINIUM_QUALIFICATION, MAXIUM_QUALIFICATION))
+                RatingType.MAIN_COURSE, Generator.generateRandomNumber(0, QUANTITY_OF_MAIN_PLATE - 1),  //				RatingType.FUERTE, 0,
+                Generator.generateRandomNumber(MINIUM_QUALIFICATION, MAXIUM_QUALIFICATION))
         )
         ratingList.add(
             Rating(
-                RatingType.ENTRY, Utilities.randomNumber(-1, QUANTITY_OF_ENTREE_PLATE - 1),
-                Utilities.randomNumber(MINIUM_QUALIFICATION, MAXIUM_QUALIFICATION))
+                RatingType.ENTRY, Generator.generateRandomNumber(-1, QUANTITY_OF_ENTREE_PLATE - 1),
+                Generator.generateRandomNumber(MINIUM_QUALIFICATION, MAXIUM_QUALIFICATION))
         )
         ratingList.add(
             Rating(
-                RatingType.DESSERT, Utilities.randomNumber(-1, QUANTITY_OF_DESSERT_PLATE - 1),
-                Utilities.randomNumber(MINIUM_QUALIFICATION, MAXIUM_QUALIFICATION))
+                RatingType.DESSERT, Generator.generateRandomNumber(-1, QUANTITY_OF_DESSERT_PLATE - 1),
+                Generator.generateRandomNumber(MINIUM_QUALIFICATION, MAXIUM_QUALIFICATION))
         )
         ratingList.add(
             Rating(
-                RatingType.DESSERT, Utilities.randomNumber(-1, QUANTITY_OF_DESSERT_PLATE - 1),
-                Utilities.randomNumber(MINIUM_QUALIFICATION, MAXIUM_QUALIFICATION))
+                RatingType.DESSERT, Generator.generateRandomNumber(-1, QUANTITY_OF_DESSERT_PLATE - 1),
+                Generator.generateRandomNumber(MINIUM_QUALIFICATION, MAXIUM_QUALIFICATION))
         )
     }
 

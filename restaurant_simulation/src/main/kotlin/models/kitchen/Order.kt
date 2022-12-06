@@ -1,14 +1,14 @@
 package models.kitchen
 
-import structures.QueuList
+import structures.CustomerQueu
 
 class Order {
     private val id: Long
-    val orderItemQueue: QueuList<OrderItem?>
+    val orderItemQueue: CustomerQueu<OrderItem?>
 
     init {
         id = idCounter++
-        orderItemQueue = QueuList(null)
+        orderItemQueue = CustomerQueu(null)
         //		this.orderItemList = new ArrayList<>();
     }
 

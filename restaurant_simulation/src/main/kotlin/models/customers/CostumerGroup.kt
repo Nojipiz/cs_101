@@ -1,7 +1,7 @@
 package models.customers
 
 import models.timers.Time
-import utilities.Utilities
+import utilities.Generator
 
 class CostumerGroup(arrivalTime: Time?) {
     val customerGroupId: Long
@@ -11,7 +11,7 @@ class CostumerGroup(arrivalTime: Time?) {
 
     init {
         customerGroupId = idCounter++
-        val randomNumber = Utilities.randomNumber(1, 4)
+        val randomNumber = Generator.generateRandomNumber(1, 4)
         this.arrivalTime = arrivalTime
         departureTime = null
         customerList = arrayOfNulls(randomNumber)

@@ -1,37 +1,37 @@
 package structures
 
-class QueuList<E>(comparator: Comparator<E?>?) : Iterable<E?> {
-    private var head: QueuNode<E>? = null
-    private val comparator: Comparator<E?>?
+class CustomerQueu<E>(comparator: Comparator<E?>?) : Iterable<E?> {
+    private var rootNode: QueuNode<E>? = null
+    private val criterian: Comparator<E?>?
 
     init {
-        this.comparator = comparator
+        this.criterian = comparator
     }
 
     fun push(data: E) {
-        head = if (!isEmpty) {
+        rootNode = if (!isEmpty) {
             val currentNode = QueuNode(data)
-            currentNode.nextNode = head
+            currentNode.nextNode = rootNode
             currentNode
         } else QueuNode(data)
     }
 
     fun pool() {
-        var currentNode = head
+        var currentNode = rootNode
         var lastNode: QueuNode<E>? = null
         while (currentNode != null) {
             lastNode = if (currentNode.nextNode != null) currentNode else lastNode
             currentNode = currentNode.nextNode
         }
-        if (lastNode != null) lastNode.nextNode = null else head = null
+        if (lastNode != null) lastNode.nextNode = null else rootNode = null
     }
 
     val isEmpty: Boolean
-        get() = head == null
+        get() = rootNode == null
 
     fun peek(): E? {
-        var currentNode = head
-        var nextNode = head
+        var currentNode = rootNode
+        var nextNode = rootNode
         while (currentNode != null) {
             nextNode = if (currentNode.nextNode != null) currentNode.nextNode else nextNode
             currentNode = currentNode.nextNode
@@ -40,16 +40,16 @@ class QueuList<E>(comparator: Comparator<E?>?) : Iterable<E?> {
     }
 
     fun search(data: E): E? {
-        var currentNode = head
+        var currentNode = rootNode
         while (currentNode != null) {
-            currentNode = if (comparator!!.compare(currentNode.data, data) == 0) return currentNode.data else currentNode.nextNode
+            currentNode = if (criterian!!.compare(currentNode.data, data) == 0) return currentNode.data else currentNode.nextNode
         }
         return null
     }
 
     override fun iterator(): MutableIterator<E?> {
         return object : MutableIterator<E?> {
-            var currentNode = head
+            var currentNode = rootNode
             override fun hasNext(): Boolean {
                 return currentNode != null
             }
@@ -63,5 +63,9 @@ class QueuList<E>(comparator: Comparator<E?>?) : Iterable<E?> {
             override fun remove() {
             }
         }
+    }
+    inner class QueuNode<E>(var data: E) {
+        var nextNode: QueuNode<E>? = null
+
     }
 }
