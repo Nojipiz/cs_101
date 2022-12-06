@@ -11,32 +11,36 @@ object FileOperations {
     private const val DB_PATH = "./db/data/" //dejar la ruta del archivo
 
     @Throws(IOException::class)
-    fun readFile(): ArrayList<Time> {
+    fun readFile(): MutableList<Time> {
+        val timeList = mutableListOf<Time>()
         var lineList: List<String>
-        var name_file: String
         var timeData: Array<String>
-        val timeList = ArrayList<Time>()
-        for (week_i in 1..WEEKS_TO_SIMULATE) {
-            for (day_i in 1..DAYS_PER_WEEKS) {
-                name_file = "arrivals" + "_" + "week" + week_i + "_" + "day" + day_i
-                lineList = Files.readAllLines(Paths.get(DB_PATH + name_file + ".csv"))
-                for (i in lineList.indices) {
-                    timeData = lineList[i].split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        var name_file: String
 
-                    //				int miliSecondsHour = (Integer.parseInt(dataHour[0])*60*60*1000)/TIME_SHORTENER;
-                    //				int miliSecondsMinute = (Integer.parseInt(dataHour[1])*60*1000)/TIME_SHORTENER;
-                    //				int miliSecondsSeconds = (Integer.parseInt(dataHour[2])*1000)/TIME_SHORTENER;
-                    val hour = timeData[0].toInt()
-                    val minute = timeData[1].toInt()
-                    val seconds = timeData[2].toInt()
-
-//					CostumerGroup costumerGroup = new CostumerGroup(new Time(week_i, day_i, hour, minute, seconds));
-                    val time = Time(week_i, day_i, hour, minute, seconds)
-                    //					costumerGroupList.add(costumerGroup);
-                    timeList.add(time)
+        (1..WEEKS_TO_SIMULATE).forEach { week ->
+            (1..DAYS_PER_WEEKS).forEach { day ->
+                name_file = "arrivals" + "_" + "week" + week + "_" + "day" + day
+                lineList = Files.readAllLines(Paths.get(DB_PATH + name_file+ ".csv"))
+                lineList.forEachIndexed( ) {indexed, line ->
+                    timeData = lineList[indexed].split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                    timeList.add(Time(week,day,timeData[0].toInt(), timeData[1].toInt(), timeData[2].toInt()))
                 }
             }
         }
+//        for (week_i in 1..WEEKS_TO_SIMULATE) {
+//            for (day_i in 1..DAYS_PER_WEEKS) {
+//                name_file = "arrivals" + "_" + "week" + week_i + "_" + "day" + day_i
+//                lineList = Files.readAllLines(Paths.get(DB_PATH + name_file + ".csv"))
+//                for (i in lineList.indices) {
+//                    timeData = lineList[i].split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+//                    val hour = timeData[0].toInt()
+//                    val minute = timeData[1].toInt()
+//                    val seconds = timeData[2].toInt()
+//                    val time = Time(week_i, day_i, hour, minute, seconds)
+//                    timeList.add(time)
+//                }
+//            }
+//        }
         return timeList
     }
 }

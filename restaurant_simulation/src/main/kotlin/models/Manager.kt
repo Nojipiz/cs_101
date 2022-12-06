@@ -15,18 +15,18 @@ import models.rating.RatingType
 import models.rating.Rating
 import models.timers.Time
 import persistence.FileOperations
-import structures.QueuList
+import structures.CustomerQueu
 
 class Manager {
-    private val dessertPlateList: ArrayList<DessertPlate>
-    private val mainCourseList: ArrayList<MainCourse>
-    private val entreePlateList: ArrayList<EntreePlate>
-    private val timeArrivalsClientList: ArrayList<Time>?
+    private val dessertPlateList: MutableList<DessertPlate>
+    private val mainCourseList: MutableList<MainCourse>
+    private val entreePlateList: MutableList<EntreePlate>
+    private val timeArrivalsClientList: MutableList<Time>?
 
-    var groupQueue: QueuList<CostumerGroup?>
-    var orderQueue: QueuList<Order?>
-    var paymentQueue: QueuList<CostumerGroup>
-    var paymentPriorityQueue: QueuList<CostumerGroup>
+    var groupQueue: CustomerQueu<CostumerGroup?>
+    var orderQueue: CustomerQueu<Order?>
+    var paymentQueue: CustomerQueu<CostumerGroup>
+    var paymentPriorityQueue: CustomerQueu<CostumerGroup>
     val invoiceList: ArrayList<Invoice>
     val waiterList: ArrayList<Waiter>
     val cookList: ArrayList<Cook>
@@ -35,10 +35,10 @@ class Manager {
         dessertPlateList = ArrayList()
         entreePlateList = ArrayList()
         mainCourseList = ArrayList()
-        groupQueue = QueuList(null)
-        orderQueue = QueuList(null)
-        paymentQueue = QueuList(null)
-        paymentPriorityQueue = QueuList(null)
+        groupQueue = CustomerQueu(null)
+        orderQueue = CustomerQueu(null)
+        paymentQueue = CustomerQueu(null)
+        paymentPriorityQueue = CustomerQueu(null)
         invoiceList = ArrayList()
         waiterList = ArrayList()
         cookList = ArrayList()
