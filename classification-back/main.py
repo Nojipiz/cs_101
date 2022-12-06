@@ -1,3 +1,4 @@
+from cv2 import os
 from flask import Flask, request
 from numpy import ndarray
 from classification_model import *
@@ -19,3 +20,10 @@ def classify_image():
     trunc_result = "{0:.3}".format(classify_result.item(0))
     result = trunc_result.replace('[', '').replace(']', '')
     return '{"result":' + result + '}'
+
+if __name__ == '__main__':
+    port = os.getenv('PORT')
+    if(port == None):
+        print("Error on $PORT env variable")
+    else:
+        app.run(host="0.0.0.0", port=int(port), debug=True)
