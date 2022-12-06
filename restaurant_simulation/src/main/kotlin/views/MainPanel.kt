@@ -7,7 +7,9 @@ import javax.swing.JPanel
 import javax.swing.JSpinner
 import javax.swing.SpinnerNumberModel
 
-class MainPanel : JPanel() {
+class MainPanel(
+    val startSimulation : () -> Unit,
+) : JPanel() {
     init {
         init()
         isVisible = true
@@ -21,7 +23,7 @@ class MainPanel : JPanel() {
         val startSimulation = JButton("Start Simulation")
         startSimulation.bounds = Rectangle(100, 100, 300, 50)
         startSimulation.addActionListener{
-            print("TODO!")
+            startSimulation()
         }
         add(startSimulation)
 

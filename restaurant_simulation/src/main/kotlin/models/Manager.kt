@@ -18,7 +18,6 @@ import persistence.FileOperations
 import structures.QueuList
 
 class Manager {
-    private val class1List: ArrayList<ClaseLeturaEscritura>? = null
     private val dessertPlateList: ArrayList<DessertPlate>
     private val mainCourseList: ArrayList<MainCourse>
     private val entreePlateList: ArrayList<EntreePlate>

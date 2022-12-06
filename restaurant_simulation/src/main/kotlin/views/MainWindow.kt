@@ -5,7 +5,9 @@ import java.awt.event.ActionListener
 import javax.swing.ImageIcon
 import javax.swing.JFrame
 
-class MainWindow() : JFrame() {
+class MainWindow(
+    val startSimulation : () -> Unit,
+) : JFrame() {
 
     private val mainPanel: MainPanel
     init {
@@ -15,7 +17,7 @@ class MainWindow() : JFrame() {
         size = Constants.SIZE
         title = "RestaurantSimulation"
         iconImage = ImageIcon(javaClass.getResource("/img/Icon.png")).image
-        mainPanel = MainPanel()
+        mainPanel = MainPanel(startSimulation)
         add(mainPanel, BorderLayout.CENTER)
     }
 }

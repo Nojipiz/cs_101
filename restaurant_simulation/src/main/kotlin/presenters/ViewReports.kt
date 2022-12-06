@@ -7,30 +7,30 @@ import models.kitchen.Cook
 import models.kitchen.SpecialtyType
 import models.timers.Time
 import views.MainWindow
-import java.awt.event.ActionEvent
-import java.awt.event.ActionListener
 import java.io.IOException
 import javax.swing.Timer
 
-class Presenter{
+class ViewReports{
     private var mainWindow: MainWindow? = null
     private lateinit var modelDao: Manager
-    private val simulationClock: Time
-    private val simulationLimit: Time
+    private var simulationClock: Time = Time(0,0,0)
+    private var simulationLimit: Time = Time(0,0,0)
     var animationTimer: Timer? = null
     var speed = 0
 
     init {
         try {
-            mainWindow = MainWindow()
+            mainWindow = MainWindow(){
+                simulationClock = Time(1, 1, 0, 0, 0)
+                simulationLimit = Time(1, 2, 1, 1, 0)
+                runSimultaion()
+            }
             modelDao = Manager()
         } catch (e: IOException) {
             e.printStackTrace()
         }
         mainWindow!!.isVisible = true
-        simulationClock = Time(1, 1, 0, 0, 0)
-        simulationLimit = Time(1, 2, 1, 1, 0)
-        //runSimultaion()
+
     }
 
     private fun runSimultaion() {

@@ -1,10 +1,10 @@
 package runner
 
-import presenters.Presenter
+import presenters.ViewReports
 
 object Run {
     @JvmStatic
     fun main(args: Array<String>) {
-        Presenter()
+        ViewReports()
     }
 }
