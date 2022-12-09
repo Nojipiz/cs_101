@@ -5,11 +5,15 @@ import javax.swing.JButton
 import javax.swing.JLabel
 import javax.swing.JPanel
 import javax.swing.JSpinner
+import javax.swing.JTextArea
 import javax.swing.SpinnerNumberModel
 
 class MainPanel(
     val startSimulation : () -> Unit,
 ) : JPanel() {
+
+    private lateinit var textArea:JTextArea
+
     init {
         init()
         isVisible = true
@@ -41,5 +45,14 @@ class MainPanel(
         }
         getGraphValue.bounds = Rectangle(60, 240, 180, 40)
         add(getGraphValue)
+
+        textArea = JTextArea()
+        textArea.isEditable = false
+        textArea.bounds = Rectangle(20, 300, 500, 600)
+        add(textArea)
+    }
+
+    fun showResults(text:String){
+        textArea.text = textArea.text + "\n" + text
     }
 }

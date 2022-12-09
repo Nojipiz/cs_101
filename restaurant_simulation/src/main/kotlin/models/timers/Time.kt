@@ -24,7 +24,7 @@ class Time {
     }
 
     fun increaseHour() {
-        hour = hour + 1
+        hour += 1
     }
 
     fun increaseMinute() {
@@ -32,11 +32,11 @@ class Time {
     }
 
     fun increaseSecond() {
-        second = second + 1
+        second += 1
     }
 
     fun increaseDay() {
-        day = day + 1
+        day += 1
     }
 
     fun increaseWeek() {
@@ -44,7 +44,23 @@ class Time {
     }
 
     fun beforeThan(time: Time?): Boolean {
-        return week < time!!.week || week == time.week && day < time.day || week == time.week && day == time.day && hour < time.hour || week == time.week && day == time.day && hour == time.hour && minute < time.minute || week == time.week && day == time.day && hour == time.hour && minute == time.minute && second < time.second
+        if(time == null)
+            return false
+        return (week < time.week
+                || ((week == time.week)
+                && (day < time.day))
+                || ((week == time.week)
+                && (day == time.day)
+                && (hour < time.hour))
+                || ((week == time.week)
+                && (day == time.day)
+                && (hour == time.hour)
+                && (minute < time.minute))
+                || (week == time.week)
+                && (day == time.day)
+                && (hour == time.hour)
+                && (minute == time.minute)
+                && second < time.second)
     }
 
     fun addTime(time: Time?) {

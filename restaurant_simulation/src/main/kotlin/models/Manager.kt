@@ -18,52 +18,27 @@ import persistence.FileOperations
 import structures.CustomerQueu
 
 class Manager {
-    private val dessertPlateList: MutableList<DessertPlate>
-    private val mainCourseList: MutableList<MainCourse>
-    private val entreePlateList: MutableList<EntreePlate>
-    private val timeArrivalsClientList: MutableList<Time>?
+    private val dessertPlateList = mutableListOf<DessertPlate>()
+    private val mainCourseList= mutableListOf<MainCourse>()
+    private val entreePlateList= mutableListOf<EntreePlate>()
+    private val timeArrivalsClientList = FileOperations.readFile()
 
-    var groupQueue: CustomerQueu<CostumerGroup?>
-    var orderQueue: CustomerQueu<Order?>
-    var paymentQueue: CustomerQueu<CostumerGroup>
-    var paymentPriorityQueue: CustomerQueu<CostumerGroup>
-    val invoiceList: ArrayList<Invoice>
-    val waiterList: ArrayList<Waiter>
-    val cookList: ArrayList<Cook>
+    var groupQueue: CustomerQueu<CostumerGroup?> = CustomerQueu(null)
+    var orderQueue: CustomerQueu<Order?> = CustomerQueu(null)
+    var paymentQueue: CustomerQueu<CostumerGroup> = CustomerQueu(null)
+    var paymentPriorityQueue: CustomerQueu<CostumerGroup> = CustomerQueu(null)
+    val invoiceList = mutableListOf<Invoice>()
+    val waiterList: MutableList<Waiter> = mutableListOf(Waiter(), Waiter(), Waiter())
+    val cookList: MutableList<Cook> = mutableListOf(Cook(SpecialtyType.DESSERT), Cook(SpecialtyType.ENTRY),Cook(SpecialtyType.ENTRY))
 
     init {
-        dessertPlateList = ArrayList()
-        entreePlateList = ArrayList()
-        mainCourseList = ArrayList()
-        groupQueue = CustomerQueu(null)
-        orderQueue = CustomerQueu(null)
-        paymentQueue = CustomerQueu(null)
-        paymentPriorityQueue = CustomerQueu(null)
-        invoiceList = ArrayList()
-        waiterList = ArrayList()
-        cookList = ArrayList()
-        timeArrivalsClientList = FileOperations.readFile()
         startRestaurantMenu()
-        createWaiterList()
-        createCookList()
         createGroupQueue()
     }
 
-    private fun createWaiterList() {
-
-        for (i in 0 until WAITER_NUMBER) {
-            waiterList.add(Waiter())
-        }
-    }
-
-    private fun createCookList() {
-        cookList.add(Cook(SpecialtyType.DESSERT))
-        cookList.add(Cook(SpecialtyType.ENTRY))
-    }
-
     private fun createGroupQueue() {
-        for (i in timeArrivalsClientList!!.indices) {
-            groupQueue.push(CostumerGroup(timeArrivalsClientList[i]))
+        timeArrivalsClientList.indices.forEach{
+            groupQueue.push(CostumerGroup(timeArrivalsClientList[it]))
         }
     }
 
@@ -352,7 +327,6 @@ class Manager {
     companion object {
         private const val WAITER_NUMBER = 3
 
-        //	private ArrayList<CostumerGroup> costumerEatingList;
         private const val WEEKS_TO_SIMULATE = 3
         private const val DAYS_PER_WEEKS = 7
     }

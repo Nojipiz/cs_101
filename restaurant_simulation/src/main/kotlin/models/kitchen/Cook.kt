@@ -3,10 +3,10 @@ package models.kitchen
 import models.timers.Time
 
 class Cook(specialy: SpecialtyType) {
-    val cookId: Long = idCounter++
+    var cookId: Int = 0
     private var isAvailable: Boolean
     val specialy: SpecialtyType
-    private var assignedSpeciality: Int
+    private var specialsAssignetCount: Int
     var nextFreeTime: Time?
         private set
     val orderItemList: Array<OrderItem?>
@@ -14,17 +14,17 @@ class Cook(specialy: SpecialtyType) {
     init {
         this.specialy = specialy
         isAvailable = true
-        assignedSpeciality = 0
-        nextFreeTime = Time(1, 1, 0, 0, 0)
+        specialsAssignetCount = 0
+        nextFreeTime = Time(1, 2, 0, 0, 0)
         orderItemList = arrayOfNulls(SPECIAL_PLATE_LIMIT)
     }
 
     fun isAvailable(specialtyType: SpecialtyType?, currentTime: Time?): Boolean {
-        if (specialy == specialtyType && assignedSpeciality < SPECIAL_PLATE_LIMIT) {
+        if (specialy == specialtyType && specialsAssignetCount < SPECIAL_PLATE_LIMIT) {
             isAvailable = true
-        } else if (nextFreeTime!!.beforeThan(currentTime)) {
+        } else if (nextFreeTime?.beforeThan(currentTime) == true) {
             resetOrderItemList()
-            assignedSpeciality = 0
+            specialsAssignetCount = 0
             isAvailable = true
         }
         return isAvailable
@@ -36,7 +36,7 @@ class Cook(specialy: SpecialtyType) {
         nextFreeTime!!.addTime(currentSimulation)
         isAvailable = false
         if (specialy == orderItem?.plateType) {
-            assignedSpeciality++
+            specialsAssignetCount++
         }
     }
 
@@ -55,7 +55,6 @@ class Cook(specialy: SpecialtyType) {
     }
 
     companion object {
-        private var idCounter: Long = 0
         private const val SPECIAL_PLATE_LIMIT = 2
     }
 }

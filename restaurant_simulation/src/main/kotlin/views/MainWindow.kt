@@ -20,4 +20,8 @@ class MainWindow(
         mainPanel = MainPanel(startSimulation)
         add(mainPanel, BorderLayout.CENTER)
     }
+
+    fun showResults(text:String){
+        mainPanel.showResults(text)
+    }
 }
