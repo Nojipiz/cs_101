@@ -28,7 +28,7 @@ class Manager {
     var paymentQueue: CustomerQueu<CostumerGroup> = CustomerQueu(null)
     var paymentPriorityQueue: CustomerQueu<CostumerGroup> = CustomerQueu(null)
     val invoiceList = mutableListOf<Invoice>()
-    val waiterList: MutableList<Waiter> = mutableListOf(Waiter(), Waiter(), Waiter())
+    val waiterList: MutableList<Waiter> = mutableListOf(Waiter(1), Waiter(2), Waiter(3))
     val cookList: MutableList<Cook> = mutableListOf(Cook(SpecialtyType.DESSERT), Cook(SpecialtyType.ENTRY),Cook(SpecialtyType.ENTRY))
 
     init {
@@ -238,7 +238,7 @@ class Manager {
                 for (actualClient in clientsList!!) {
                     val qualificationList = actualClient?.ratingList
                     for (actualQuialification in qualificationList!!) {
-                        val code = actualQuialification!!.getcode()
+                        val code = actualQuialification.getcode()
                         val score = actualQuialification.score
                         val qualificationType = actualQuialification.type
                         if (code != -1) {
