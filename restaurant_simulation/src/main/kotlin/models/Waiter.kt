@@ -1,16 +1,16 @@
 package models
 
-class Waiter {
+class Waiter(
     val id: Long
-    private var assignedTables: Int
-    var isAvaliable: Boolean
-        private set
+    ) {
 
-    init {
-        id = idCounter++
-        assignedTables = 0
-        isAvaliable = true
+    companion object {
+        private const val MAX_ASSIGNE_TABLES = 3
     }
+
+    private var assignedTables: Int = 0
+
+    var isAvaliable: Boolean = true
 
     fun catchTable() {
         assignedTables++
@@ -26,8 +26,4 @@ class Waiter {
         }
     }
 
-    companion object {
-        private var idCounter: Long = 1
-        private const val MAX_ASSIGNE_TABLES = 3
-    }
 }

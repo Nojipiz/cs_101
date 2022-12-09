@@ -12,7 +12,7 @@ import javax.swing.Timer
 
 class ViewReports {
     private var mainWindow: MainWindow? = null
-    private var modelDao: Manager
+    private lateinit var modelDao: Manager
     private var simulationClock: Time = Time(0, 0, 0)
     private var simulationLimit: Time = Time(0, 0, 0)
     var animationTimer: Timer? = null
@@ -20,13 +20,12 @@ class ViewReports {
 
     init {
         mainWindow = MainWindow {
+            modelDao = Manager()
             simulationClock = Time(0, 0, 0, 0, 0)
             simulationLimit = Time(15, 1, 1, 1, 0)
             runSimultaion()
         }
-        modelDao = Manager()
         mainWindow!!.isVisible = true
-
     }
 
     private fun runSimultaion() {

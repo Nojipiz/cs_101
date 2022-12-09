@@ -1,6 +1,7 @@
 package models.kitchen
 
 import models.timers.Time
+import utilities.Generator
 
 class Cook(specialy: SpecialtyType) {
     var cookId: Int = 0
@@ -10,6 +11,8 @@ class Cook(specialy: SpecialtyType) {
     var nextFreeTime: Time?
         private set
     val orderItemList: Array<OrderItem?>
+
+    var efficency: MutableList<Boolean> = mutableListOf()
 
     init {
         this.specialy = specialy
@@ -38,6 +41,8 @@ class Cook(specialy: SpecialtyType) {
         if (specialy == orderItem?.plateType) {
             specialsAssignetCount++
         }
+        val badCooked = Generator.hasBeenBadCooked()
+        efficency.add(badCooked)
     }
 
     private fun addOrderItem(orderItem: OrderItem?) {
