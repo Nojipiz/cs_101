@@ -14,15 +14,15 @@ class ViewReports {
     private var mainWindow: MainWindow? = null
     private lateinit var modelDao: Manager
     private var simulationClock: Time = Time(0, 0, 0)
-    private var simulationLimit: Time = Time(0, 0, 0)
+    private lateinit var simulationLimit: Time
     var animationTimer: Timer? = null
     var speed = 0
 
     init {
         mainWindow = MainWindow {
             modelDao = Manager()
-            simulationClock = Time(0, 0, 0, 0, 0)
-            simulationLimit = Time(15, 1, 1, 1, 0)
+            simulationClock = Time(0, 0, 0)
+            simulationLimit = Time(168, 0, 0)
             runSimultaion()
         }
         mainWindow!!.isVisible = true
@@ -45,7 +45,6 @@ class ViewReports {
         if (!simulationClock.beforeThan(simulationLimit)) {
             animationTimer!!.stop()
             showReports()
-            println("La simulacion ha terminado---------------------")
         }
     }
 
@@ -71,14 +70,6 @@ class ViewReports {
         if (simulationClock.minute >= 60) {
             simulationClock.minute = 0
             simulationClock.increaseHour()
-        }
-        if (simulationClock.hour == 24) {
-            simulationClock.hour = 0
-            simulationClock.increaseDay()
-        }
-        if (simulationClock.day == 7) {
-            simulationClock.day = 1
-            simulationClock.increaseWeek()
         }
     }
 
