@@ -27,20 +27,6 @@ object FileOperations {
                 }
             }
         }
-//        for (week_i in 1..WEEKS_TO_SIMULATE) {
-//            for (day_i in 1..DAYS_PER_WEEKS) {
-//                name_file = "arrivals" + "_" + "week" + week_i + "_" + "day" + day_i
-//                lineList = Files.readAllLines(Paths.get(DB_PATH + name_file + ".csv"))
-//                for (i in lineList.indices) {
-//                    timeData = lineList[i].split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-//                    val hour = timeData[0].toInt()
-//                    val minute = timeData[1].toInt()
-//                    val seconds = timeData[2].toInt()
-//                    val time = Time(week_i, day_i, hour, minute, seconds)
-//                    timeList.add(time)
-//                }
-//            }
-//        }
         return timeList
     }
 }
