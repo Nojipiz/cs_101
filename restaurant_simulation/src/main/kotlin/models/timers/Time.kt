@@ -1,8 +1,8 @@
 package models.timers
 
 class Time(
-    var hour: Int
-    var minute: Int
+    var hour: Int,
+    var minute: Int,
     var second: Int
 ) {
 
@@ -21,12 +21,7 @@ class Time(
     fun beforeThan(time: Time?): Boolean {
         if (time == null)
             return false
-        return (hour < time.hour)
-                && (hour == time.hour)
-                && (minute < time.minute)
-                && (hour == time.hour)
-                && (minute == time.minute)
-                && second < time.second
+        return hour <= time.hour
     }
 
     fun addTime(time: Time?) {

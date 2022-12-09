@@ -20,10 +20,17 @@ object FileOperations {
         (1..WEEKS_TO_SIMULATE).forEach { week ->
             (1..DAYS_PER_WEEKS).forEach { day ->
                 name_file = "arrivals" + "_" + "week" + week + "_" + "day" + day
-                lineList = Files.readAllLines(Paths.get(DB_PATH + name_file+ ".csv"))
-                lineList.forEachIndexed( ) {indexed, line ->
-                    timeData = lineList[indexed].split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                    timeList.add(Time(week,day,timeData[0].toInt(), timeData[1].toInt(), timeData[2].toInt()))
+                lineList = Files.readAllLines(Paths.get(DB_PATH + name_file + ".csv"))
+                lineList.forEachIndexed() { indexed, line ->
+                    timeData = lineList[indexed].split(":".toRegex()).dropLastWhile { it.isEmpty() }
+                        .toTypedArray()
+                    timeList.add(
+                        Time(
+                            timeData[0].toInt(),
+                            timeData[1].toInt(),
+                            timeData[2].toInt()
+                        )
+                    )
                 }
             }
         }

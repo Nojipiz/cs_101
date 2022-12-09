@@ -18,7 +18,7 @@ class Cook(specialy: SpecialtyType) {
         this.specialy = specialy
         isAvailable = true
         specialsAssignetCount = 0
-        nextFreeTime = Time(1, 2, 0, 0, 0)
+        nextFreeTime = Time(1, 2, 0)
         orderItemList = arrayOfNulls(SPECIAL_PLATE_LIMIT)
     }
 
