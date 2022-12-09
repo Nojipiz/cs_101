@@ -44,11 +44,7 @@ public class ArrivalTimes {
         var splitTimeArray = Arrays.stream(arrivalTimes).map(x -> x.split(":")).collect(Collectors.toList());
         var timeList = new ArrayList<Time>();
         splitTimeArray.forEach(x -> timeList.add(new Time(Integer.parseInt(x[0]),Integer.parseInt(x[1]),Integer.parseInt(x[2]))));
-        timeList.forEach(x -> System.out.println(x));
+        timeList.forEach(System.out::println);
         return timeList;
-    }
-
-    public static void main(String[] args) {
-        getArrivalTime();
     }
 }
