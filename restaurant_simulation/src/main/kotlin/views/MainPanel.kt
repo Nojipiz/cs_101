@@ -1,12 +1,8 @@
 package views
 
 import java.awt.Rectangle
-import javax.swing.JButton
-import javax.swing.JLabel
-import javax.swing.JPanel
-import javax.swing.JSpinner
-import javax.swing.JTextArea
-import javax.swing.SpinnerNumberModel
+import javax.swing.*
+
 
 class MainPanel(
     val startSimulation : () -> Unit,
@@ -46,10 +42,15 @@ class MainPanel(
         getGraphValue.bounds = Rectangle(60, 240, 180, 40)
         add(getGraphValue)
 
+
+
         textArea = JTextArea()
         textArea.isEditable = false
         textArea.bounds = Rectangle(20, 300, 500, 600)
-        add(textArea)
+
+        val scroll = JScrollPane(textArea)
+        scroll.bounds = Rectangle(20, 300, 500, 600)
+        add(scroll)
     }
 
     fun showResults(text:String){

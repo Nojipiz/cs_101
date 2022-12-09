@@ -1,5 +1,6 @@
 package models
 
+import data.ArrivalTimes
 import models.cashBox.Invoice
 import models.cashBox.PaymentType
 import models.customers.CostumerGroup
@@ -21,7 +22,7 @@ class Manager {
     private val dessertPlateList = mutableListOf<DessertPlate>()
     private val mainCourseList= mutableListOf<MainCourse>()
     private val entreePlateList= mutableListOf<EntreePlate>()
-    private val timeArrivalsClientList = FileOperations.readFile()
+    private val timeArrivalsClientList = ArrivalTimes.getArrivalTime()
 
     var groupQueue: CustomerQueu<CostumerGroup?> = CustomerQueu(null)
     var orderQueue: CustomerQueu<Order?> = CustomerQueu(null)
@@ -102,7 +103,7 @@ class Manager {
     }
 
     fun cookPlate(cook: Cook, orderItem: OrderItem?, currentTime: Time?) {
-        cookList[cook.cookId.toInt()].cookPlate(orderItem, currentTime)
+        cookList[cook.cookId].cookPlate(orderItem, currentTime)
     }
 
     fun setDepartureTimeGroup(currentTime: Time, orderItem: OrderItem) {

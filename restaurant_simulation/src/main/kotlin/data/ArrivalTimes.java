@@ -4,9 +4,14 @@ import models.timers.Time;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
+import java.util.logging.LoggingPermission;
 import java.util.stream.Collectors;
 
-public class ArrivalTimes {
+public abstract class ArrivalTimes {
+
+    private final static Random random = new Random();
+
     private final static String[]  arrivalTimesOne =
             {
                     "00:00:00",
@@ -106,8 +111,13 @@ public class ArrivalTimes {
                     "03:51:54",
                     "03:55:53"
             };
+
     public static ArrayList<Time> getArrivalTime(){
-        var splitTimeArray = Arrays.stream(arrivalTimesOne).map(x -> x.split(":")).collect(Collectors.toList());
+        var option = random.nextBoolean();
+        var data = arrivalTimesOne;
+        if(option)
+            data = arrivalTimesTwo;
+        var splitTimeArray = Arrays.stream(data).map(x -> x.split(":")).collect(Collectors.toList());
         var timeList = new ArrayList<Time>();
         splitTimeArray.forEach(x -> timeList.add(new Time(Integer.parseInt(x[0]),Integer.parseInt(x[1]),Integer.parseInt(x[2]))));
         timeList.forEach(System.out::println);

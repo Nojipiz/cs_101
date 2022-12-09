@@ -59,6 +59,7 @@ class ViewReports {
         showGrossIncome()
         // Las modalidades de pago presentadas en cada una de las muestras
         showPaytmentType()
+        mainWindow?.showResults("-------END------")
     }
 
     private fun timeConditions(speed: Int) {
