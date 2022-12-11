@@ -5,18 +5,16 @@ import utilities.Generator
 
 class Cook(specialy: SpecialtyType) {
     var cookId: Int = 0
-    private var isAvailable: Boolean
+    private var isAvailable: Boolean = true
     val specialy: SpecialtyType
     private var specialsAssignetCount: Int
     var nextFreeTime: Time?
         private set
     val orderItemList: Array<OrderItem?>
-
     var efficency: MutableList<Boolean> = mutableListOf()
 
     init {
         this.specialy = specialy
-        isAvailable = true
         specialsAssignetCount = 0
         nextFreeTime = Time(1, 2, 0)
         orderItemList = arrayOfNulls(SPECIAL_PLATE_LIMIT)
@@ -33,16 +31,22 @@ class Cook(specialy: SpecialtyType) {
         return isAvailable
     }
 
+    /**
+     * Here the chef cooks the order and the determine of is was a bad cook or not, and if the client will receive the cook or will reject it
+     */
     fun cookPlate(orderItem: OrderItem?, currentSimulation: Time?) {
+        isAvailable = false
         addOrderItem(orderItem)
         nextFreeTime = orderItem?.plate?.preparationTime
         nextFreeTime!!.addTime(currentSimulation)
-        isAvailable = false
         if (specialy == orderItem?.plateType) {
             specialsAssignetCount++
         }
         val badCooked = Generator.hasBeenBadCooked()
         efficency.add(badCooked)
+        if (badCooked && Generator.clientRejectCook()) {
+            addOrderItem(orderItem?.copy())
+        }
     }
 
     private fun addOrderItem(orderItem: OrderItem?) {

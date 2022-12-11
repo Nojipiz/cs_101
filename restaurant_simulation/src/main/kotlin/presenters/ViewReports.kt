@@ -19,15 +19,22 @@ class ViewReports {
     var speed = 0
 
     init {
-        mainWindow = MainWindow {
+        mainWindow = MainWindow({
             modelDao = Manager()
             simulationClock = Time(0, 0, 0)
             simulationLimit = Time(168, 0, 0)
             runSimultaion()
-        }
+        }, { cookIndex ->
+            val cook = modelDao.cookList.getOrNull(cookIndex)
+            return@MainWindow cook?.efficency ?: mutableListOf()
+        })
         mainWindow!!.isVisible = true
     }
 
+    /**
+     * This is our simulation core clock, this function makes that the politic of
+     * "Mesas disponibles en el menor tiempo posible"
+     */
     private fun runSimultaion() {
         val delay = 0
         speed = 22
@@ -120,9 +127,9 @@ class ViewReports {
     }
 
     private fun serveCustomer() {
-        val nextCostumerGroup = modelDao.groupQueue.peek()
-        val waiter = getAvailableWaiter()
-        if (nextCostumerGroup != null && !simulationClock.beforeThan(nextCostumerGroup.arrivalTime) && waiter != null) {
+        val nextCostumerGroup = modelDao.groupQueue.peek() ?: return
+        val waiter = getAvailableWaiter() ?: return
+        if (!simulationClock.beforeThan(nextCostumerGroup.arrivalTime)) {
             modelDao.addInvoiceList(Invoice(simulationClock, nextCostumerGroup, null))
             modelDao.addOrderQueue(nextCostumerGroup)
             println("un grupo ha ingresado en " + nextCostumerGroup.arrivalTime.toString())
@@ -135,27 +142,25 @@ class ViewReports {
         if (!modelDao.orderQueue.isEmpty) {
             val order = modelDao.orderQueue.peek()
             val orderItem = order?.orderItemQueue?.peek()
-            val cookList = modelDao.cookList
-            val cook = getAvailableCook(cookList, orderItem?.plateType)
-            if (cook == null) println("ningun cocinero disponible")
-            if (cook != null) {
-                println("cocinero disponible " + cook.cookId)
-                println("(antes) cocinero 0 disponible hasta " + cookList[0].nextFreeTime)
-                println("(antes) cocinero 1 disponible hasta " + cookList[1].nextFreeTime)
-                modelDao.cookPlate(cook, orderItem, simulationClock)
+            val cooksList = modelDao.cookList.shuffled()
+            getAvailableCook(cooksList, orderItem?.plateType)?.let { avaliableCook ->
+                println("cocinero disponible " + avaliableCook.cookId)
+                println("(antes) cocinero 0 disponible hasta " + cooksList[0].nextFreeTime)
+                println("(antes) cocinero 1 disponible hasta " + cooksList[1].nextFreeTime)
+                modelDao.cookPlate(avaliableCook, orderItem, simulationClock)
+
                 modelDao.poolOrderItem()
-                println("(despues) cocinero 0 disponible hasta " + cookList[0].nextFreeTime)
-                println("(despues) cocinero 1 disponible hasta " + cookList[1].nextFreeTime)
+                println("(despues) cocinero 0 disponible hasta " + cooksList[0].nextFreeTime)
+                println("(despues) cocinero 1 disponible hasta " + cooksList[1].nextFreeTime)
+                cookFinishedPlate(cooksList)
             }
-            cookFinishedPlate(cookList)
         }
     }
 
-    private fun cookFinishedPlate(cookList: MutableList<Cook>?) {
-        for (i in cookList!!.indices) {
-            if (!simulationClock.beforeThan(cookList[i].nextFreeTime)) {
-                sendPlateToGroup(cookList[i])
-            }
+    private fun cookFinishedPlate(cookList: List<Cook>?) {
+        cookList?.forEach { cook ->
+            if (!simulationClock.beforeThan(cook.nextFreeTime))
+                sendPlateToGroup(cook)
         }
     }
 
@@ -172,7 +177,7 @@ class ViewReports {
         }
     }
 
-    private fun getAvailableCook(cookList: MutableList<Cook>?, plateType: SpecialtyType?): Cook? {
+    private fun getAvailableCook(cookList: List<Cook>?, plateType: SpecialtyType?): Cook? {
         val availableCooker = cookList?.find { it.isAvailable(plateType, simulationClock) }
         availableCooker?.let {
             println("Especilidades: plato- $plateType mesero ${availableCooker.specialy}")
@@ -182,7 +187,7 @@ class ViewReports {
     }
 
     private fun getAvailableWaiter(): Waiter? {
-        val waiterList = modelDao.waiterList
+        val waiterList = modelDao.waiterList.shuffled()
         return waiterList.find { it.isAvaliable }
     }
 

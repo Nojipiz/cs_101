@@ -14,4 +14,6 @@ object Generator {
             else -> false
         }
     }
+
+    fun clientRejectCook() = pseudorandomGenerate.nextBoolean()
 }

@@ -20,8 +20,8 @@ import structures.CustomerQueu
 
 class Manager {
     private val dessertPlateList = mutableListOf<DessertPlate>()
-    private val mainCourseList= mutableListOf<MainCourse>()
-    private val entreePlateList= mutableListOf<EntreePlate>()
+    private val mainCourseList = mutableListOf<MainCourse>()
+    private val entreePlateList = mutableListOf<EntreePlate>()
     private val timeArrivalsClientList = ArrivalTimes.getArrivalTime()
 
     var groupQueue: CustomerQueu<CostumerGroup?> = CustomerQueu(null)
@@ -29,8 +29,9 @@ class Manager {
     var paymentQueue: CustomerQueu<CostumerGroup> = CustomerQueu(null)
     var paymentPriorityQueue: CustomerQueu<CostumerGroup> = CustomerQueu(null)
     val invoiceList = mutableListOf<Invoice>()
-    val waiterList: MutableList<Waiter> = mutableListOf(Waiter(1), Waiter(2), Waiter(3))
-    val cookList: MutableList<Cook> = mutableListOf(Cook(SpecialtyType.DESSERT), Cook(SpecialtyType.ENTRY),Cook(SpecialtyType.ENTRY))
+    val waiterList: List<Waiter> = listOf(Waiter(1), Waiter(2), Waiter(3))
+    val cookList: List<Cook> =
+        listOf(Cook(SpecialtyType.DESSERT), Cook(SpecialtyType.ENTRY), Cook(SpecialtyType.ENTRY))
 
     init {
         startRestaurantMenu()
@@ -38,24 +39,48 @@ class Manager {
     }
 
     private fun createGroupQueue() {
-        timeArrivalsClientList.indices.forEach{
+        timeArrivalsClientList.indices.forEach {
             groupQueue.push(CostumerGroup(timeArrivalsClientList[it]))
         }
     }
 
     private fun startRestaurantMenu() {
         entreePlateList.add(EntreePlate("Causa de atún", Time(0, 7, 10), Time(0, 5, 0), 13.000))
-        entreePlateList.add(EntreePlate("Chicharrón de calamar", Time(0, 4, 0), Time(0, 6, 0), 11.000))
+        entreePlateList.add(
+            EntreePlate(
+                "Chicharrón de calamar",
+                Time(0, 4, 0),
+                Time(0, 6, 0),
+                11.000
+            )
+        )
         mainCourseList.add(MainCourse("Aguadito norteño", Time(0, 27, 12), Time(0, 11, 23), 33.800))
-        mainCourseList.add(MainCourse("Chupe de langostinos", Time(0, 32, 0), Time(0, 15, 19), 35.200))
+        mainCourseList.add(
+            MainCourse(
+                "Chupe de langostinos",
+                Time(0, 32, 0),
+                Time(0, 15, 19),
+                35.200
+            )
+        )
         dessertPlateList.add(DessertPlate("Chocotejas", Time(0, 8, 7), Time(0, 11, 34), 5.000))
-        dessertPlateList.add(DessertPlate("Arroz con leche", Time(0, 7, 12), Time(0, 13, 19), 3.600))
+        dessertPlateList.add(
+            DessertPlate(
+                "Arroz con leche",
+                Time(0, 7, 12),
+                Time(0, 13, 19),
+                3.600
+            )
+        )
     }
 
     fun poolToGroupQueue() {
         groupQueue.pool()
     }
 
+    /**
+     * Here we ask the clients list want they want and create a order to push into the queue or orders
+     */
     fun addOrderQueue(costumerGroup: CostumerGroup) {
         val groupId = costumerGroup.customerGroupId
         val clientList = costumerGroup.customerList
@@ -67,7 +92,7 @@ class Manager {
             ratingList = myClient.ratingList
             ratingList.forEachIndexed { index, qualification ->
                 code = qualification.getcode()
-                if (code != -1) {
+                if (code != NO_MORE_FOOD) {
                     item = getItem(item, code, ratingList, index, groupId)
                     order.addItem(item)
                 }
@@ -82,28 +107,26 @@ class Manager {
         ratingList: ArrayList<Rating>,
         index: Int,
         idGroup: Long
-    ): OrderItem? {
-        var item = item
-        var plate: Plate
-        when (ratingList!![index].type) {
+    ): OrderItem {
+        val plate: Plate
+        return when (ratingList[index].type) {
             RatingType.ENTRY -> {
                 plate = entreePlateList[code]
-                item = OrderItem(plate, SpecialtyType.ENTRY, idGroup)
+                OrderItem(plate, SpecialtyType.ENTRY, idGroup)
             }
             RatingType.MAIN_COURSE -> {
                 plate = mainCourseList[code]
-                item = OrderItem(plate, SpecialtyType.MAIN_COURSE, idGroup)
+                OrderItem(plate, SpecialtyType.MAIN_COURSE, idGroup)
             }
-            RatingType.DESSERT -> {
+            else -> {
                 plate = dessertPlateList[code]
-                item = OrderItem(plate, SpecialtyType.DESSERT, idGroup)
+                OrderItem(plate, SpecialtyType.DESSERT, idGroup)
             }
         }
-        return item
     }
 
-    fun cookPlate(cook: Cook, orderItem: OrderItem?, currentTime: Time?) {
-        cookList[cook.cookId].cookPlate(orderItem, currentTime)
+    fun cookPlate(cook: Cook, orderItem: OrderItem?, currentTime: Time?){
+        cook.cookPlate(orderItem, currentTime)
     }
 
     fun setDepartureTimeGroup(currentTime: Time, orderItem: OrderItem) {
@@ -257,9 +280,11 @@ class Manager {
                     }
                 }
             }
-            val averageEntreePlate = getAverageScore(countScoreEntreePlateList, countEntreePlateList)
+            val averageEntreePlate =
+                getAverageScore(countScoreEntreePlateList, countEntreePlateList)
             val averageMainPlate = getAverageScore(countScoreMainPlateList, countMainPlateList)
-            val averageDessertPlate = getAverageScore(countScoreDessertPlateList, countDessertPlateList)
+            val averageDessertPlate =
+                getAverageScore(countScoreDessertPlateList, countDessertPlateList)
             val coordenateEntreePlate = getBestCoordenate(averageEntreePlate)
             val coordenateMainPlate = getBestCoordenate(averageMainPlate)
             val coordenateDessertPlate = getBestCoordenate(averageDessertPlate)
@@ -326,9 +351,6 @@ class Manager {
     }
 
     companion object {
-        private const val WAITER_NUMBER = 3
-
-        private const val WEEKS_TO_SIMULATE = 3
-        private const val DAYS_PER_WEEKS = 7
+        const val NO_MORE_FOOD = -1
     }
 }

@@ -6,7 +6,8 @@ import javax.swing.ImageIcon
 import javax.swing.JFrame
 
 class MainWindow(
-    val startSimulation : () -> Unit,
+    startSimulation : () -> Unit,
+    getCookInformation: (index:Int) -> MutableList<Boolean>
 ) : JFrame() {
 
     private val mainPanel: MainPanel
@@ -17,7 +18,7 @@ class MainWindow(
         size = Constants.SIZE
         title = "RestaurantSimulation"
         iconImage = ImageIcon(javaClass.getResource("/img/Icon.png")).image
-        mainPanel = MainPanel(startSimulation)
+        mainPanel = MainPanel(startSimulation, getCookInformation )
         add(mainPanel, BorderLayout.CENTER)
     }
 

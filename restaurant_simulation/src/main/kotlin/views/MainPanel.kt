@@ -5,10 +5,11 @@ import javax.swing.*
 
 
 class MainPanel(
-    val startSimulation : () -> Unit,
+    val startSimulation: () -> Unit,
+    val getCookInformation: (index: Int) -> MutableList<Boolean>
 ) : JPanel() {
 
-    private lateinit var textArea:JTextArea
+    private lateinit var textArea: JTextArea
 
     init {
         init()
@@ -22,8 +23,8 @@ class MainPanel(
 
         val startSimulation = JButton("Start Simulation")
         startSimulation.bounds = Rectangle(100, 100, 300, 50)
-        startSimulation.addActionListener{
-            startSimulation()
+        startSimulation.addActionListener {
+            SwingUtilities.invokeLater { startSimulation() }
         }
         add(startSimulation)
 
@@ -36,8 +37,13 @@ class MainPanel(
         add(chefSpinner)
 
         val getGraphValue = JButton("Get performance")
-        getGraphValue.addActionListener{
-            print("TODO!")
+        getGraphValue.addActionListener {
+            SwingUtilities.invokeLater {
+                val list =
+                    getCookInformation((chefSpinner.model.value as Int))
+                        .map { return@map if (it) 1.0 else 0.0 }
+                GraphPanel.createAndShowGui(list)
+            }
         }
         getGraphValue.bounds = Rectangle(60, 240, 180, 40)
         add(getGraphValue)
@@ -53,7 +59,7 @@ class MainPanel(
         add(scroll)
     }
 
-    fun showResults(text:String){
+    fun showResults(text: String) {
         textArea.text = textArea.text + "\n" + text
     }
 }
