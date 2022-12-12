@@ -1,6 +1,8 @@
 package views
 
+import java.awt.Dimension
 import java.awt.Rectangle
+import java.awt.Toolkit
 import javax.swing.*
 
 
@@ -8,7 +10,8 @@ class MainPanel(
     val startSimulation: () -> Unit,
     val getCookInformation: (index: Int) -> MutableList<Boolean>
 ) : JPanel() {
-
+    private val SIZE = Dimension(500, 500);
+    private val SCREEN_SIZE: Dimension = Toolkit.getDefaultToolkit().screenSize;
     private lateinit var textArea: JTextArea
 
     init {
@@ -18,8 +21,8 @@ class MainPanel(
 
     private fun init() {
         layout = null
-        size = Constants.SIZE
-        preferredSize = Constants.SIZE
+        size = SIZE
+        preferredSize = SIZE
 
         val startSimulation = JButton("Start Simulation")
         startSimulation.bounds = Rectangle(100, 100, 300, 50)
