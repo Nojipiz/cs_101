@@ -41,7 +41,7 @@ class ViewReports {
         animationTimer = Timer(delay) {
             timeConditions(speed)
             serveCustomer()
-            prepareAndEatFood()
+            makeAndServe()
             exitToRestaurant()
             simulationLimit()
         }
@@ -56,16 +56,11 @@ class ViewReports {
     }
 
     private fun showReports() {
-        // Entrada, Plato Fuerte y Postre mejor vendidos
         showPlatesBestSeller()
-        // Entrada, Plato Fuerte y Postre mejor calificados
         showPlatesBestCalificated()
-        // Mesero mejor calificado
         showWaiterBestCalificated()
-        // Ingresos en bruto del restaurante en cada una de las muestras
         showGrossIncome()
-        // Las modalidades de pago presentadas en cada una de las muestras
-        showPaytmentType()
+        showPaymentType()
         mainWindow?.showResults("-------END------")
     }
 
@@ -92,17 +87,9 @@ class ViewReports {
         var costumerGroup: CostumerGroup? = null
         if (!paymentPriorityQueue.isEmpty) {
             costumerGroup = paymentPriorityQueue.peek()
-            println(
-                "Un grupo ha pagado y ha salido de retaurante " + (costumerGroup?.departureTime
-                    ?: "")
-            )
             paymentPriorityQueue.pool()
         } else if (!paymentQueue.isEmpty) {
             costumerGroup = paymentQueue.peek()
-            println(
-                "  un grupo ha pagado y ha salido de retaurante " + (costumerGroup?.departureTime
-                    ?: "")
-            )
             paymentQueue.pool()
         }
     }
@@ -114,7 +101,6 @@ class ViewReports {
             costumerGroup = invoList[i].costumerGroup
             if (costumerGroup?.departureTime != null) {
                 if (!simulationClock.beforeThan(costumerGroup.departureTime)) {
-                    println("  un grupo esta en pasarela de pagos " + costumerGroup.departureTime)
                     if (invoList[i].paymentType == PaymentType.CASH) {
                         modelDao.pushPaymentPriorityQueue(costumerGroup)
                     }
@@ -132,26 +118,19 @@ class ViewReports {
         if (!simulationClock.beforeThan(nextCostumerGroup.arrivalTime)) {
             modelDao.addInvoiceList(Invoice(simulationClock, nextCostumerGroup, null))
             modelDao.addOrderQueue(nextCostumerGroup)
-            println("un grupo ha ingresado en " + nextCostumerGroup.arrivalTime.toString())
             modelDao.poolToGroupQueue()
         }
     }
 
-    private fun prepareAndEatFood() {
+    private fun makeAndServe() {
         modelDao.deleteorder()
         if (!modelDao.orderQueue.isEmpty) {
             val order = modelDao.orderQueue.peek()
             val orderItem = order?.orderItemQueue?.peek()
             val cooksList = modelDao.cookList.shuffled()
             getAvailableCook(cooksList, orderItem?.plateType)?.let { avaliableCook ->
-                println("cocinero disponible " + avaliableCook.cookId)
-                println("(antes) cocinero 0 disponible hasta " + cooksList[0].nextFreeTime)
-                println("(antes) cocinero 1 disponible hasta " + cooksList[1].nextFreeTime)
                 modelDao.cookPlate(avaliableCook, orderItem, simulationClock)
-
                 modelDao.poolOrderItem()
-                println("(despues) cocinero 0 disponible hasta " + cooksList[0].nextFreeTime)
-                println("(despues) cocinero 1 disponible hasta " + cooksList[1].nextFreeTime)
                 cookFinishedPlate(cooksList)
             }
         }
@@ -170,9 +149,6 @@ class ViewReports {
             orderItemList[i]?.let {
                 modelDao.setDepartureTimeGroup(simulationClock, it)
                 modelDao.setDepartureTimeGroup(simulationClock, it)
-                println(
-                    "El cocinero ${cook.cookId} ha finalizado la preparacion de ${it.plate.name} para el grupo ${it.idGroup} ${simulationClock}"
-                )
             }
         }
     }
@@ -180,8 +156,6 @@ class ViewReports {
     private fun getAvailableCook(cookList: List<Cook>?, plateType: SpecialtyType?): Cook? {
         val availableCooker = cookList?.find { it.isAvailable(plateType, simulationClock) }
         availableCooker?.let {
-            println("Especilidades: plato- $plateType mesero ${availableCooker.specialy}")
-            println("Encontramos disponible a cocinero ${availableCooker.cookId}")
         }
         return availableCooker
     }
@@ -191,11 +165,10 @@ class ViewReports {
         return waiterList.find { it.isAvaliable }
     }
 
-    // ======================== Muestreo de Reportes ========================00
-    private fun showPaytmentType() {
+    private fun showPaymentType() {
         val paymentsList = modelDao.paytmentType
         paymentsList.forEach { (paymentType, countPaymentType) ->
-            println("Se realizaron $countPaymentType pagos en $paymentType")
+            mainWindow?.showResults("Se realizaron $countPaymentType pagos en $paymentType")
         }
     }
 
@@ -221,9 +194,9 @@ class ViewReports {
         val platesBestCalificated = modelDao.entreePlateMainPlateAndDessertBestCalificated
         mainWindow?.showResults(
             """
-            La entrada mejor calificada es ${platesBestCalificated[0].name}
-            El plato fuerte mejor calificado es ${platesBestCalificated[1].name}
-            El postre mejor calificado es ${platesBestCalificated[2].name}
+            El plato de entrada mejor calificado fue ${platesBestCalificated[0].name}
+            El plato fuerte mejor calificado fue  ${platesBestCalificated[1].name}
+            El postre mejor calificado fue ${platesBestCalificated[2].name}
             """.trimIndent()
         )
     }
@@ -232,9 +205,9 @@ class ViewReports {
         val platesBestCalificated = modelDao.entreePlateMainPlateAndDessertBestSeller
         mainWindow?.showResults(
             """
-            La entrada mejor vendida es ${platesBestCalificated[0].name}
-            El plato fuerte mejor vendido es ${platesBestCalificated[1].name}
-            El postre mejor vendido es ${platesBestCalificated[2].name}
+            El plato de entrada mas vendido fue ${platesBestCalificated[0].name}
+            El plato fuerte mas vendido fue ${platesBestCalificated[1].name}
+            El postre mas vendido fue ${platesBestCalificated[2].name}
             """.trimIndent()
         )
     }

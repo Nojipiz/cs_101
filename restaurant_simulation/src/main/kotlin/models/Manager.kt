@@ -15,10 +15,10 @@ import models.kitchen.plates.Plate
 import models.rating.RatingType
 import models.rating.Rating
 import models.timers.Time
-import persistence.FileOperations
 import structures.CustomerQueu
 
 class Manager {
+
     private val dessertPlateList = mutableListOf<DessertPlate>()
     private val mainCourseList = mutableListOf<MainCourse>()
     private val entreePlateList = mutableListOf<EntreePlate>()
@@ -352,5 +352,9 @@ class Manager {
 
     companion object {
         const val NO_MORE_FOOD = -1
+        const val PERSONAL_PIZZA = "Pizza personal"
+        const val MID_SIZE_PIZZA = "Pizza mediana"
+        const val FAMILIAR_PIZZA = "Pizza familiar"
+        const val POTATOES_CHIP = "Papas fritas"
     }
 }
