@@ -15,6 +15,7 @@ class ViewReports {
     private lateinit var modelDao: Manager
     private var simulationClock: Time = Time(0, 0, 0)
     private lateinit var simulationLimit: Time
+
     var animationTimer: Timer? = null
     var speed = 0
 
@@ -37,7 +38,7 @@ class ViewReports {
      */
     private fun runSimultaion() {
         val delay = 0
-        speed = 22
+        speed = 15
         animationTimer = Timer(delay) {
             timeConditions(speed)
             serveCustomer()
@@ -178,7 +179,8 @@ class ViewReports {
     }
 
     private fun getAvailableCook(cookList: List<Cook>?, plateType: SpecialtyType?): Cook? {
-        val availableCooker = cookList?.find { it.isAvailable(plateType, simulationClock) }
+        val availableCooker =
+            cookList?.shuffled()?.find { it.isAvailable(plateType, simulationClock) }
         availableCooker?.let {
             println("Especilidades: plato- $plateType mesero ${availableCooker.specialy}")
             println("Encontramos disponible a cocinero ${availableCooker.cookId}")
