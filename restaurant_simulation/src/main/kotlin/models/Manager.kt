@@ -45,31 +45,39 @@ class Manager {
     }
 
     private fun startRestaurantMenu() {
-        entreePlateList.add(EntreePlate("Causa de atún", Time(0, 7, 10), Time(0, 5, 0), 13.000))
+        entreePlateList.add(EntreePlate(POTATOES_CHIP, Time(0, 7, 10), Time(0, 5, 0), 4.800))
         entreePlateList.add(
             EntreePlate(
-                "Chicharrón de calamar",
-                Time(0, 4, 0),
-                Time(0, 6, 0),
-                11.000
+                YUCA_CHIP,
+                Time(0, 5, 0),
+                Time(0, 8, 0),
+                7.000
             )
         )
-        mainCourseList.add(MainCourse("Aguadito norteño", Time(0, 27, 12), Time(0, 11, 23), 33.800))
+        mainCourseList.add(MainCourse(PERSONAL_PIZZA, Time(0, 16, 16), Time(0, 14, 30), 16.000))
         mainCourseList.add(
             MainCourse(
-                "Chupe de langostinos",
-                Time(0, 32, 0),
-                Time(0, 15, 19),
-                35.200
+                MID_SIZE_PIZZA,
+                Time(0, 15, 32),
+                Time(0, 20, 19),
+                33.000
             )
         )
-        dessertPlateList.add(DessertPlate("Chocotejas", Time(0, 8, 7), Time(0, 11, 34), 5.000))
+        mainCourseList.add(
+            MainCourse(
+                FAMILIAR_PIZZA,
+                Time(0, 14, 0),
+                Time(0, 28, 21),
+                62.000
+            )
+        )
+        dessertPlateList.add(DessertPlate(ICE_CREAM, Time(0, 6, 27), Time(0, 1, 12), 4.500))
         dessertPlateList.add(
             DessertPlate(
-                "Arroz con leche",
+                BLACKBERRIE_MILK_SHAKE,
                 Time(0, 7, 12),
                 Time(0, 13, 19),
-                3.600
+                5.800
             )
         )
     }
@@ -170,17 +178,21 @@ class Manager {
         get() {
             var countPaymentTypeCard = 0
             var countPaymentTypeEfecty = 0
+            var countPaymentBank = 0
             for (actualInvoice in invoiceList) {
                 val paymentType = actualInvoice.paymentType
                 if (paymentType == PaymentType.CREDIT_CARD) {
                     countPaymentTypeCard++
-                } else {
+                } else if(paymentType == PaymentType.CASH){
                     countPaymentTypeEfecty++
+                }else{
+                    countPaymentBank++
                 }
             }
             val paymentsList = HashMap<PaymentType, Int>()
             paymentsList[PaymentType.CASH] = countPaymentTypeEfecty
             paymentsList[PaymentType.CREDIT_CARD] = countPaymentTypeCard
+            paymentsList[PaymentType.BANK_TRANSACTION] = countPaymentBank
             return paymentsList
         }
 
@@ -352,9 +364,15 @@ class Manager {
 
     companion object {
         const val NO_MORE_FOOD = -1
+
         const val PERSONAL_PIZZA = "Pizza personal"
         const val MID_SIZE_PIZZA = "Pizza mediana"
         const val FAMILIAR_PIZZA = "Pizza familiar"
+
         const val POTATOES_CHIP = "Papas fritas"
+        const val YUCA_CHIP = "Papas fritas"
+
+        const val ICE_CREAM= "Helado"
+        const val BLACKBERRIE_MILK_SHAKE= "Malteada de Mora"
     }
 }
