@@ -12,9 +12,9 @@ interface Props{
 
 const ChartResult: React.FC<Props> = ({data1, data2}) => {
     const mydata = {
-        labels: ['Error', 'Fiabilidad'],
+        labels: ['Fiabilidad', 'Error'],
         datasets:[{
-            backgroundColor:['#CB3234', '#2d728f'],
+            backgroundColor:['#2d728f', '#CB3234'],
             data:[data1,data2]
         }]
     }

@@ -41,8 +41,8 @@ export default function ResultModal() {
             </p>
             <p className={styles.result_data}>{'Resultado: ' + result}</p> */}
             <ChartResult 
-            data1 = {result * 100 }
-            data2 = {(1 - result) * 100}
+            data1 = {(result > 0.5 ? result * 100 : (1 - result) * 100)}
+            data2 = {(1 - result)*100}
             />
           </>
 
