@@ -6,8 +6,8 @@ import {
   convertToBase64
 } from '../../api/ClassificationRequest';
 import { HomeContext } from '../HomePage/HomePage';
-import styles from './styles.module.css';
-
+// import styles from './styles.module.css';
+import styles from "./styles.module.css";
 export default function DropZone() {
   const { setIsLoading, setOnError, setImage, setResult } =
     useContext(HomeContext);

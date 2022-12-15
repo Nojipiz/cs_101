@@ -2,6 +2,7 @@ import { useContext } from 'react';
 import Modal from 'react-modal';
 import { HomeContext } from '../HomePage/HomePage';
 import styles from './styles.module.css';
+import ChartResult from './ChartResult';
 
 Modal.setAppElement('#root');
 
@@ -34,12 +35,17 @@ export default function ResultModal() {
             <h2 className={styles.result}>
               {result > 0.5 ? 'Araña' : 'Mosca'}
             </h2>
-            <p className={styles.fiability}>
+            {/* <p className={styles.fiability}>
               {'Fiabilidad: ' +
                 (result > 0.5 ? result * 100 : (1 - result) * 100)}
             </p>
-            <p className={styles.result_data}>{'Resultado: ' + result}</p>
+            <p className={styles.result_data}>{'Resultado: ' + result}</p> */}
+            <ChartResult 
+            data1 = {result * 100 }
+            data2 = {(1 - result) * 100}
+            />
           </>
+
         )}
         {image && (
           <img
